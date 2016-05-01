@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>分类 : Singapore | Forward</title>
+    <title>Categories : Singapore | Forward</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="HeZhichao">
@@ -32,10 +32,7 @@
     <link rel="apple-touch-icon-precomposed" href="/img/faviconlogo.jpg">
     
     <link rel="stylesheet" href="/css/style.css">
-	
-	<!--20160501 leancloud.cn 为了统计访问量-->
-	<script src="https://leancloud.cn/scripts/lib/av-0.4.6.min.js"></script>
-	<script>AV.initialize("hf8PxdTxBd4viu7KMI63xbgw-gzGzoHsz", "VAj0e9mFIhD632UX67zCn3nu");</script>
+
 </head>
 
     <body>
@@ -51,7 +48,7 @@
 				<h1 class="site-name"><a href="/" title="Forward">Forward</a></h1>
 				<h2 class="blog-motto">To be a Practical Idealist</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -67,7 +64,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
 						<input type="hidden" name="q" value="site:yoursite.com">
 					</form>
 					
@@ -246,7 +243,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
@@ -262,76 +259,155 @@ var _hmt = _hmt || [];
 
 <!-- Tiny_search End -->
 
+<!-- Lean Cloud Begin -->
+<!-- Lean Cloud Begin -->
+<script src="https://leancloud.cn/scripts/lib/av-0.5.0.min.js"></script>
+<script type="text/javascript">
 
-<!--page counter part 20160501-->
-<script>
-function addCount (Counter) {
-        url=$('.article-date').attr('href').trim();
+    /* For the statistics of page views */
+    AV.initialize(
+        "hf8PxdTxBd4viu7KMI63xbgw-gzGzoHsz", // 应用 id
+        "VAj0e9mFIhD632UX67zCn3nu" // 应用 key
+    );
+
+    function addCount(Counter) {
+        url = $('.article-url').attr('href').trim();
         title = $('.article-title').text().trim();
-        var query=new AV.Query(Counter);
-        //use url as unique idnetfication
-        query.equalTo("url",url);
+		
+        var query = new AV.Query(Counter);
+		
+        query.equalTo("url",url); // use url as unique idnetfication
         query.find({
-            success: function(results){
-                if(results.length>0)
-                {
-                    var counter=results[0];
+            success: function(results) {
+                if (results.length>0) {
+                    var counter = results[0];
                     counter.fetchWhenSave(true); //get recent result
                     counter.increment("time");
                     counter.save();
-                }
-                else
-                {
-                    var newcounter=new Counter();
-                    newcounter.set("title",title);
-                    newcounter.set("url",url);
-                    newcounter.set("time",1);
-                    newcounter.save(null,{
-                        success: function(newcounter){
-                        //alert('New object created');
+                } else {
+                    var newcounter = new Counter();
+                    newcounter.set("title", title);
+                    newcounter.set("url", url);
+                    newcounter.set("time", 1);
+                    newcounter.save(null, {
+                        success: function(newcounter) {
+                            //alert('New object created');
                         },
-                        error: function(newcounter,error){
-                        alert('Failed to create');
+                        error: function(newcounter,error) {
+                            //alert('Failed to create');
                         }
-                        });
+                    });
                 }
             },
-            error: function(error){
-                //find null is not a error
-                alert('Error:'+error.code+" "+error.message);
+            error: function(error) { // find null is not a error
+                //alert('Error:' + error.code + " " + error.message);
             }
         });
-}
-$(function(){
-        var Counter=AV.Object.extend("Counter");
-        //only increse visit counting when intering a page
-        if ($('.article-title').length == 1)
-           addCount(Counter);
-        var query=new AV.Query(Counter);
-        query.descending("time");
-        // the sum of popular posts
-        query.limit(10); 
-        query.find({
-            success: function(results){
-                    for(var i=0;i<results.length;i++)    
-                    {
-                        var counter=results[i];
-                        title=counter.get("title");
-                        url=counter.get("url");
-                        time=counter.get("time");
-                        // add to the popularlist widget
-                        showcontent=title+" ("+time+")";
-                        //notice the "" in href
-                        $('.popularlist').append('<li><a href="'+url+'">'+showcontent+'</a></li>');
+    }
+
+    $(function() {
+        var Counter = AV.Object.extend("Counter");
+        // Only increse visit counting when it's a post
+        // and it's not the local site.
+        if (1 == $('.article-title').length
+            //TODO && (-1 != location.href.indexOf("icehe.me"))
+        ) {
+            addCount(Counter);
+        }
+
+        // if popularlist widget exists, add item to it.
+        var popular_list = $('.popularlist');
+        if (1 == popular_list.length) {
+            var query = new AV.Query(Counter);
+            query.descending("time");
+            query.limit(20);
+            query.find({
+                success: function(results) {
+                    for(var i = 0; i < results.length; ++i) {
+                        var counter = results[i];
+                        title = counter.get("title");
+
+                        $('#popularlist_ul li:eq(' + i + ')').html('<a href="'
+                                + counter.get("url") + '" name="'
+                                + title + '">'
+                                + '<sup>'
+                                + counter.get("time") + ' </sup> &nbsp;'
+                                + title
+                                + '</a>'
+                        );
                     }
                 },
-            error: function(error){
-                alert("Error:"+error.code+" "+error.message);
-            }
-            }
-        )
-        });
-</script>
+                error: function(error) {
+                    //alert("Error:" + error.code + " " + error.message);
+                }
+            });
+        }
 
+        // if cur page is a post, set the post pageview.
+        var article_info = $(".article-info");
+		//alert("article_info.length = "+article_info.length);
+        if (1 == article_info.length) {
+            var query = new AV.Query(Counter);
+			//alert("title "+article_info.find(".article-title").length);
+            query.equalTo("url", article_info.find(".article-title a").attr("href"));
+            query.limit(1);
+            query.find({
+                success: function(results) {
+                    if (1 == results.length) {
+                        var counter = results[0];
+                        title = counter.get("title");
+                        url = counter.get("url");
+                        time = counter.get("time");
+                        article_info.find(".article-pageview").text(time);
+                    }
+                },
+                error: function(error) {
+                    article_info.find(".article-pageview").text("?");
+                    //alert("Error:" + error.code + " " + error.message);
+                }
+            });
+        }
+		/**
+		else if(1 < article_info.length){
+			var query = new AV.Query(Counter);
+			index = article_info.length-1;
+			updatepageview(article_info);
+		}**/
+
+        // if cur page is Home, set the post_list's pageviews.
+		//alert("post_list:"+post_list.length);
+        if (1 < article_info.length) {
+            var a_items = article_info.find(".article-title");
+			//alert("a_items:"+a_items.length);
+			var query = new AV.Query(Counter);
+            for (var i = 0; i < a_items.length; ++i) {
+                var url = a_items.eq(i).find("a").attr("href");
+				//alert("url:"+url);
+                query.equalTo("url", url);
+                query.limit(1);
+                query.find({
+                    success: function(results) {
+						
+                        if (1 == results.length) {
+                            var counter = results[0];
+                            title = counter.get("title");
+                            url = counter.get("url");
+                            time = counter.get("time");
+							//alert("url:"+url);
+							//alert(".parent():"+a_items.find("a[href='"+url+"']").parent("h1").parent("header").length);
+							a_items.find("a[href='"+url+"']").parent("h1").parent("header").find('.article-pageview').text(time);
+                            //$(".post a[href='" + url + "']").find('.article-pageview').text(time);
+                        }
+                    },
+                    error: function(error) {
+                        //alert("Error:" + error.code + " " + error.message);
+                    }
+                });
+            }
+        }
+    });
+</script>
+<!-- Lean Cloud End -->
+<!-- Lean Cloud End -->
     </body>
    </html>
