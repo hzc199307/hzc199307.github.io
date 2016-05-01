@@ -490,6 +490,7 @@ var _hmt = _hmt || [];
     );
 
     function addCount(Counter) {
+		//alert("addCount:");
         url = $('.article-url').attr('href').trim();
         title = $('.article-title').text().trim();
 		
@@ -498,16 +499,33 @@ var _hmt = _hmt || [];
         query.equalTo("url",url); // use url as unique idnetfication
         query.find({
             success: function(results) {
+				//alert("results:"+results.length);
                 if (results.length>0) {
                     var counter = results[0];
                     counter.fetchWhenSave(true); //get recent result
                     counter.increment("time");
-                    counter.save();
+                    counter.save(null, {
+						success: function(counter) {
+							var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+							//$(document.getElementById(url)).text(content);
+						},
+						error: function(counter, error) {
+							//alert("error："+error);
+							//console.log('Failed to save Visitor num, with error message: ' + error.message);
+						}
+					});
                 } else {
+					//alert("else");
                     var newcounter = new Counter();
                     newcounter.set("title", title);
                     newcounter.set("url", url);
                     newcounter.set("time", 1);
+					// 新建一个 ACL 实例
+					var acl = new AV.ACL();
+					acl.setPublicReadAccess(true);
+					acl.setPublicWriteAccess(true);
+					// 将 ACL 实例赋予 newcounter 对象
+					newcounter.setACL(acl);
                     newcounter.save(null, {
                         success: function(newcounter) {
                             //alert('New object created');
@@ -548,7 +566,8 @@ var _hmt = _hmt || [];
 
                         $('#popularlist_ul li:eq(' + i + ')').html('<a href="'
                                 + counter.get("url") + '" name="'
-                                + title + '">'
+                                + title + '">No.'
+								+ (i+1) + '&nbsp&nbsp'
                                 + '<sup>'
                                 + counter.get("time") + ' </sup> &nbsp;'
                                 + title
@@ -581,7 +600,7 @@ var _hmt = _hmt || [];
                     }
                 },
                 error: function(error) {
-                    article_info.find(".article-pageview").text("?");
+                    article_info.find(".article-pageview").text("0");
                     //alert("Error:" + error.code + " " + error.message);
                 }
             });
@@ -606,7 +625,6 @@ var _hmt = _hmt || [];
                 query.limit(1);
                 query.find({
                     success: function(results) {
-						
                         if (1 == results.length) {
                             var counter = results[0];
                             title = counter.get("title");
@@ -619,6 +637,7 @@ var _hmt = _hmt || [];
                         }
                     },
                     error: function(error) {
+						a_items.find("a[href='"+url+"']").parent("h1").parent("header").find('.article-pageview').text("0");
                         //alert("Error:" + error.code + " " + error.message);
                     }
                 });
