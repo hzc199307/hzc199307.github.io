@@ -4,23 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Hello World | Forward</title>
+    <title>基于DNN的艺术风格生成算法的应用 | Forward</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="HeZhichao">
     
 
     
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+    <meta name="description" content="富有艺术感的Paper2015年，德国科学家发表了一篇名为《A Neural Algorithm of Artistic Style》的论文，它使用深度学习算法，将普通图片进行加工，便可以创造出指定图片风格的作品。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://hzc199307.github.io/tech/hexo/hello-world/index.html">
+<meta property="og:title" content="基于DNN的艺术风格生成算法的应用">
+<meta property="og:url" content="http://hzc199307.github.io/deeplearning/app/neural-art/index.html">
 <meta property="og:site_name" content="Forward">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
-<meta property="og:updated_time" content="2016-05-07T00:20:58.681Z">
+<meta property="og:description" content="富有艺术感的Paper2015年，德国科学家发表了一篇名为《A Neural Algorithm of Artistic Style》的论文，它使用深度学习算法，将普通图片进行加工，便可以创造出指定图片风格的作品。">
+<meta property="og:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/style_.jpg">
+<meta property="og:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/content_.jpg">
+<meta property="og:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/painting_.jpg">
+<meta property="og:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/neural-style_500_.jpg">
+<meta property="og:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/neuralart_500_.jpg">
+<meta property="og:updated_time" content="2016-05-07T01:24:46.435Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub.">
+<meta name="twitter:title" content="基于DNN的艺术风格生成算法的应用">
+<meta name="twitter:description" content="富有艺术感的Paper2015年，德国科学家发表了一篇名为《A Neural Algorithm of Artistic Style》的论文，它使用深度学习算法，将普通图片进行加工，便可以创造出指定图片风格的作品。">
+<meta name="twitter:image" content="http://hzc199307.github.io/deeplearning/app/neural-art/style_.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Forward" type="application/atom+xml">
@@ -80,7 +86,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name" class="article-title">
     
-      <a href="/tech/hexo/hello-world/" title="Hello World" itemprop="url" class="article-url">Hello World</a>
+      <a href="/deeplearning/app/neural-art/" title="基于DNN的艺术风格生成算法的应用" itemprop="url" class="article-url">基于DNN的艺术风格生成算法的应用</a>
   </h1>
   <p class="article-author">By
        
@@ -90,7 +96,7 @@
 		
   <p class="article-time">
     
-			<time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
+			<time datetime="2016-05-06T14:00:00.000Z" itemprop="datePublished"> Published 2016-05-06</time>
     
 		<!--用于显示浏览数-->
         &nbsp;/&nbsp; <span class="article-pageview">?</span> views
@@ -98,7 +104,7 @@
   
 <!--
   <p class="article-time">
-    <time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
+    <time datetime="2016-05-06T14:00:00.000Z" itemprop="datePublished"> Published 2016-05-06</time>
     
   </p>
 -->
@@ -109,20 +115,18 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#富有艺术感的Paper"><span class="toc-number">1.</span> <span class="toc-text">富有艺术感的Paper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验室产品"><span class="toc-number">2.</span> <span class="toc-text">实验室产品</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Style"><span class="toc-number">2.1.</span> <span class="toc-text">Style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content"><span class="toc-number">2.2.</span> <span class="toc-text">Content</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Result"><span class="toc-number">2.3.</span> <span class="toc-text">Result</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他源码"><span class="toc-number">3.</span> <span class="toc-text">其他源码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#neural-style"><span class="toc-number">3.1.</span> <span class="toc-text">neural-style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#neuralart"><span class="toc-number">3.2.</span> <span class="toc-text">neuralart</span></a></li></ol></li></ol>
 		
 		</div>
 		
-		<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+		<h2 id="富有艺术感的Paper"><a href="#富有艺术感的Paper" class="headerlink" title="富有艺术感的Paper"></a>富有艺术感的Paper</h2><p>2015年，德国科学家发表了一篇名为<a href="http://arxiv.org/abs/1508.06576" target="_blank" rel="external">《A Neural Algorithm of Artistic Style》</a>的论文，它使用深度学习算法，将普通图片进行加工，便可以创造出指定图片风格的作品。<br><a id="more"></a><br>艺术家可能需要用毕生的心血才能创造出惊人的艺术作品，而论文所述算法便可以用很短的时间将普通图片创造出富有大师风格的画作。</p>
+<h2 id="实验室产品"><a href="#实验室产品" class="headerlink" title="实验室产品"></a>实验室产品</h2><p>据此论文，我们实验室研发了一个应用，并且和其它公布出来的源码做了对比。</p>
+<h3 id="Style"><a href="#Style" class="headerlink" title="Style"></a>Style</h3><p>本人并不是很喜欢欧美抽象派的画作，倒是对国内大师的中国风作品颇有好感，于是我选了吴冠中《小桥流水人家》系列的一幅作品做为<em>style</em>，虽远不及最近拍卖的《周庄》出名，但是整体感觉要好，颜色也更丰富了些，展现江南水乡的美。<br><img src="/deeplearning/app/neural-art/style_.jpg" alt="吴冠中《小桥流水人家》" title="吴冠中《小桥流水人家》"></p>
+<h3 id="Content"><a href="#Content" class="headerlink" title="Content"></a>Content</h3><p><em>content</em>图片的内容一般来说要和style的内容接近才好，当然随意的搭配也可能产生神奇的效果。本人在广州读的本硕，自然想到了岭南建筑，这里选了广州市大学城岭南印象园的一张图片。好吧，我承认其实这张照片不太好看。但是，如果最后跑出来的合成结果效果不错的话，不就更能说明算法和应用的功效吗？<br><img src="/deeplearning/app/neural-art/content_.jpg" alt="广州市大学城岭南印象园" title="广州市大学城岭南印象园"></p>
+<h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><p>经过150次的迭代，结果如下图。原图搭配吴冠中的画风，普通照相技术下的照片被“美化”了，有木有？！这个‘学习’出来的效果真的不错，原本青砖纹路的墙壁被渐渐刷白，留下屋檐的轮廓。街上的人物、灯笼等，也和原图一样，是一个个的彩色小点。<br><img src="/deeplearning/app/neural-art/painting_.jpg" alt="“吴冠中的”《岭南印象园》" title="“吴冠中的”《岭南印象园》"></p>
+<h2 id="其他源码"><a href="#其他源码" class="headerlink" title="其他源码"></a>其他源码</h2><p>笔者暂时装好了下面两个:</p>
+<h3 id="neural-style"><a href="#neural-style" class="headerlink" title="neural-style"></a>neural-style</h3><p> <a href="https://github.com/jcjohnson/neural-style" title="neural-style" target="_blank" rel="external"><code>https://github.com/jcjohnson/neural-style</code></a><br>neural-style产生的效果差不多，它对原图的色彩保留较好，测试1000像素图片迭代500次大概7分钟+；但是我们代码的黑色墨笔勾勒地更深，更接近于吴冠中的风格。<br><strong>安装：</strong><br>按照教程<a href="https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md" title="https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md" target="_blank" rel="external"><code>https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md</code></a><br>出现问题：<code>安装loadcaffe时，出现Error: Failed cloning git repositor</code><br>解决办法：<code>执行:&quot;git config --global url.&quot;https://&quot;.insteadOf git://&quot;</code><br><img src="/deeplearning/app/neural-art/neural-style_500_.jpg" alt="neural-style迭代500次效果" title="neural-style迭代500次效果"></p>
+<h3 id="neuralart"><a href="#neuralart" class="headerlink" title="neuralart"></a>neuralart</h3><p> <a href="https://github.com/kaishengtai/neuralart" title="neuralart" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart</code></a><br>neuralart的效果就没那么好，且消耗内存巨大（因为同样的设置居然跑不动，非得设置成sgd），但是隐隐约约我能感受到它很适用于水粉画和印象派。<br><strong>安装：</strong><br>安装教程：<a href="https://github.com/kaishengtai/neuralart/blob/master/README.md" title="https://github.com/kaishengtai/neuralart/blob/master/README.md" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart/blob/master/README.md</code></a><br>但它需要用到 <em>qlua</em>， <em>qlua</em> 默认没有安装，且依赖 <em>lua5.2</em>，所以将 <em>neural-style</em> 安装时在 <em>torch</em> 下默认安装的 <em>lua5.1</em> 换成 <em>lua5.2</em>，根据<a href="http://torch.ch/docs/getting-started.html" target="_blank" rel="external"><code>http://torch.ch/docs/getting-started.html</code></a>。<br>另外，源代码默认是启用GPU 0，所以修改源代码添加对GPU的设置。<br><img src="/deeplearning/app/neural-art/neuralart_500_.jpg" alt="neuralart迭代500次效果" title="neuralart迭代500次效果"></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -130,13 +134,13 @@
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Tech/">Tech</a>►<a class="article-category-link" href="/categories/Tech/Hexo/">Hexo</a>
+  <a class="article-category-link" href="/categories/Research/">Research</a>►<a class="article-category-link" href="/categories/Research/DeepLearning/">DeepLearning</a>►<a class="article-category-link" href="/categories/Research/DeepLearning/APP/">APP</a>
 </div>
 
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Hexo/">Hexo</a>
+  <span></span> <a href="/tags/DeepLearning/">DeepLearning</a><a href="/tags/APP/">APP</a><a href="/tags/Art/">Art</a>
   </div>
 
 </div>
@@ -145,7 +149,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="http://hzc199307.github.io/tech/hexo/hello-world/" data-title="Hello World | Forward" data-tsina="null" class="share clearfix">
+	  <div data-url="http://hzc199307.github.io/deeplearning/app/neural-art/" data-title="基于DNN的艺术风格生成算法的应用 | Forward" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -158,20 +162,20 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/travel/singapore/sentosa/" title="圣淘沙之旅（一）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  圣淘沙之旅（一）</span>
+
+<div class="next">
+<a href="/travel/singapore/sentosa/"  title="圣淘沙之旅（一）">
+ <strong>下一篇：</strong><br/> 
+ <span>圣淘沙之旅（一）
+</span>
 </a>
 </div>
-
 
 </nav>
 
 	
 <section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="tech/hexo/hello-world/" data-title="Hello World" data-url="http://hzc199307.github.io/tech/hexo/hello-world/"></div>
+	<div class="ds-thread" data-thread-key="deeplearning/app/neural-art/" data-title="基于DNN的艺术风格生成算法的应用" data-url="http://hzc199307.github.io/deeplearning/app/neural-art/"></div>
 </section>
 
 
@@ -183,7 +187,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#富有艺术感的Paper"><span class="toc-number">1.</span> <span class="toc-text">富有艺术感的Paper</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实验室产品"><span class="toc-number">2.</span> <span class="toc-text">实验室产品</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Style"><span class="toc-number">2.1.</span> <span class="toc-text">Style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Content"><span class="toc-number">2.2.</span> <span class="toc-text">Content</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Result"><span class="toc-number">2.3.</span> <span class="toc-text">Result</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他源码"><span class="toc-number">3.</span> <span class="toc-text">其他源码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#neural-style"><span class="toc-number">3.1.</span> <span class="toc-text">neural-style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#neuralart"><span class="toc-number">3.2.</span> <span class="toc-text">neuralart</span></a></li></ol></li></ol>
  
   </div>
 
