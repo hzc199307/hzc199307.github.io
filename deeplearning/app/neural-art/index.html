@@ -22,7 +22,7 @@
 <meta property="og:image" content="http://hezhichao.cn/deeplearning/app/neural-art/painting_.jpg">
 <meta property="og:image" content="http://hezhichao.cn/deeplearning/app/neural-art/neural-style_500_.jpg">
 <meta property="og:image" content="http://hezhichao.cn/deeplearning/app/neural-art/neuralart_500_.jpg">
-<meta property="og:updated_time" content="2016-05-07T01:24:46.435Z">
+<meta property="og:updated_time" content="2016-05-07T09:03:24.814Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于DNN的艺术风格生成算法的应用">
 <meta name="twitter:description" content="富有艺术感的Paper2015年，德国科学家发表了一篇名为《A Neural Algorithm of Artistic Style》的论文，它使用深度学习算法，将普通图片进行加工，便可以创造出指定图片风格的作品。">
@@ -126,7 +126,13 @@
 <h3 id="Result"><a href="#Result" class="headerlink" title="Result"></a>Result</h3><p>经过150次的迭代，结果如下图。原图搭配吴冠中的画风，普通照相技术下的照片被“美化”了，有木有？！这个‘学习’出来的效果真的不错，原本青砖纹路的墙壁被渐渐刷白，留下屋檐的轮廓。街上的人物、灯笼等，也和原图一样，是一个个的彩色小点。<br><img src="/deeplearning/app/neural-art/painting_.jpg" alt="“吴冠中的”《岭南印象园》" title="“吴冠中的”《岭南印象园》"></p>
 <h2 id="其他源码"><a href="#其他源码" class="headerlink" title="其他源码"></a>其他源码</h2><p>笔者暂时装好了下面两个:</p>
 <h3 id="neural-style"><a href="#neural-style" class="headerlink" title="neural-style"></a>neural-style</h3><p> <a href="https://github.com/jcjohnson/neural-style" title="neural-style" target="_blank" rel="external"><code>https://github.com/jcjohnson/neural-style</code></a><br>neural-style产生的效果差不多，它对原图的色彩保留较好，测试1000像素图片迭代500次大概7分钟+；但是我们代码的黑色墨笔勾勒地更深，更接近于吴冠中的风格。<br><strong>安装：</strong><br>按照教程<a href="https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md" title="https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md" target="_blank" rel="external"><code>https://github.com/jcjohnson/neural-style/blob/master/INSTALL.md</code></a><br>出现问题：<code>安装loadcaffe时，出现Error: Failed cloning git repositor</code><br>解决办法：<code>执行:&quot;git config --global url.&quot;https://&quot;.insteadOf git://&quot;</code><br><img src="/deeplearning/app/neural-art/neural-style_500_.jpg" alt="neural-style迭代500次效果" title="neural-style迭代500次效果"></p>
-<h3 id="neuralart"><a href="#neuralart" class="headerlink" title="neuralart"></a>neuralart</h3><p> <a href="https://github.com/kaishengtai/neuralart" title="neuralart" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart</code></a><br>neuralart的效果就没那么好，且消耗内存巨大（因为同样的设置居然跑不动，非得设置成sgd），但是隐隐约约我能感受到它很适用于水粉画和印象派。<br><strong>安装：</strong><br>安装教程：<a href="https://github.com/kaishengtai/neuralart/blob/master/README.md" title="https://github.com/kaishengtai/neuralart/blob/master/README.md" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart/blob/master/README.md</code></a><br>但它需要用到 <em>qlua</em>， <em>qlua</em> 默认没有安装，且依赖 <em>lua5.2</em>，所以将 <em>neural-style</em> 安装时在 <em>torch</em> 下默认安装的 <em>lua5.1</em> 换成 <em>lua5.2</em>，根据<a href="http://torch.ch/docs/getting-started.html" target="_blank" rel="external"><code>http://torch.ch/docs/getting-started.html</code></a>。<br>另外，源代码默认是启用GPU 0，所以修改源代码添加对GPU的设置。<br><img src="/deeplearning/app/neural-art/neuralart_500_.jpg" alt="neuralart迭代500次效果" title="neuralart迭代500次效果"></p>
+<h3 id="neuralart"><a href="#neuralart" class="headerlink" title="neuralart"></a>neuralart</h3><p> <a href="https://github.com/kaishengtai/neuralart" title="neuralart" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart</code></a><br>neuralart的效果就没那么好，且消耗内存巨大（因为同样的设置居然跑不动，非得设置成sgd），但是隐隐约约我能感受到它很适用于水粉画和印象派。<br><strong>安装：</strong><br>安装教程：<a href="https://github.com/kaishengtai/neuralart/blob/master/README.md" title="https://github.com/kaishengtai/neuralart/blob/master/README.md" target="_blank" rel="external"><code>https://github.com/kaishengtai/neuralart/blob/master/README.md</code></a><br>但它需要用到 <em>qlua</em>， <em>qlua</em> 默认没有安装，且依赖 <em>lua5.2</em>，所以将 <em>neural-style</em> 安装时在 <em>torch</em> 下默认安装的 <em>lua5.1</em> 换成 <em>lua5.2</em>，根据<a href="http://torch.ch/docs/getting-started.html" target="_blank" rel="external"><code>http://torch.ch/docs/getting-started.html</code></a>。<br>另外，源代码默认是启用GPU 0，所以修改源代码添加对GPU的设置。<br><img src="/deeplearning/app/neural-art/neuralart_500_.jpg" alt="neuralart迭代500次效果" title="neuralart迭代500次效果">
+　</p>
+<p>　</p>
+<hr>
+<p><strong>版权声明</strong></p>
+<p>本文首发于 <a href="hzc199307.github.io" title="贺智超的博客">贺智超的博客</a>（<a href="http://hezhichao.cn/" title="http://hezhichao.cn/">http://hezhichao.cn/</a> or <a href="http://hzc199307.github.io" title="http://hzc199307.github.io" target="_blank" rel="external">http://hzc199307.github.io</a>），转载请注明出处。</p>
+<p>本文链接：<a href="http://hezhichao.cn/deeplearning/app/neural-art/">http://hezhichao.cn/deeplearning/app/neural-art/</a><br>永久链接：<a href="http://hzc199307.github.io/deeplearning/app/neural-art/" target="_blank" rel="external">http://hzc199307.github.io/deeplearning/app/neural-art/</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -227,18 +233,6 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Singapore/" title="Singapore">Singapore<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Travel/" title="Travel">Travel<sup>1</sup></a></li>
-			
-		
-			
 				<li><a href="/tags/DeepLearning/" title="DeepLearning">DeepLearning<sup>1</sup></a></li>
 			
 		
@@ -248,6 +242,18 @@
 		
 			
 				<li><a href="/tags/Art/" title="Art">Art<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Singapore/" title="Singapore">Singapore<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Travel/" title="Travel">Travel<sup>1</sup></a></li>
 			
 		
 		</ul>
