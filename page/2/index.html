@@ -4,23 +4,22 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>hdoj4611解题报告 | Forward</title>
+    <title>Forward</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="HeZhichao">
     
 
     
-    <meta name="description" content="题意给三个数 N, A and B.(1&amp;lt;=N&amp;lt;=1000000000, 1&amp;lt;=A,B&amp;lt;=100000).  求 Σ| n%A - n%B |  （n=0至N-1）">
-<meta property="og:type" content="article">
-<meta property="og:title" content="hdoj4611解题报告">
-<meta property="og:url" content="http://hezhichao.cn/acm/solution_report/hdoj4611/index.html">
+    <meta name="description" content="To be a Practical Idealist">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Forward">
+<meta property="og:url" content="http://hezhichao.cn/page/2/index.html">
 <meta property="og:site_name" content="Forward">
-<meta property="og:description" content="题意给三个数 N, A and B.(1&amp;lt;=N&amp;lt;=1000000000, 1&amp;lt;=A,B&amp;lt;=100000).  求 Σ| n%A - n%B |  （n=0至N-1）">
-<meta property="og:updated_time" content="2016-05-07T16:40:37.361Z">
+<meta property="og:description" content="To be a Practical Idealist">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="hdoj4611解题报告">
-<meta name="twitter:description" content="题意给三个数 N, A and B.(1&amp;lt;=N&amp;lt;=1000000000, 1&amp;lt;=A,B&amp;lt;=100000).  求 Σ| n%A - n%B |  （n=0至N-1）">
+<meta name="twitter:title" content="Forward">
+<meta name="twitter:description" content="To be a Practical Idealist">
 
     
     <link rel="alternative" href="/atom.xml" title="Forward" type="application/atom+xml">
@@ -74,13 +73,15 @@
 </div>
     </header>
     <div id="container">
-      <div id="main" class="post" itemscope itemprop="blogPost">
-  
-	<article itemprop="articleBody"> 
-		<header class="article-info clearfix">
+      <div id="main">
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
   <h1 itemprop="name" class="article-title">
     
-      <a href="/acm/solution_report/hdoj4611/" title="hdoj4611解题报告" itemprop="url" class="article-url">hdoj4611解题报告</a>
+      <a href="/acm/solution_report/poj1173/" title="poj1173解题报告" itemprop="url" class="article-url">poj1173解题报告</a>
   </h1>
   <p class="article-author">By
        
@@ -90,7 +91,7 @@
 		
   <p class="article-time">
     
-			<time datetime="2013-07-25T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-26</time>
+			<time datetime="2013-07-20T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-21</time>
     
 		<!--用于显示浏览数-->
         &nbsp;/&nbsp; <span class="article-pageview">?</span> views
@@ -98,217 +99,25 @@
   
 <!--
   <p class="article-time">
-    <time datetime="2013-07-25T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-26</time>
+    <time datetime="2013-07-20T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-21</time>
     
   </p>
 -->
 
 </header>
-	<div class="article-content">
-		
-		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
-		
-			<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-number">1.</span> <span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路-详解"><span class="toc-number">2.</span> <span class="toc-text">思路+详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例一"><span class="toc-number">2.1.</span> <span class="toc-text">例一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例二"><span class="toc-number">2.2.</span> <span class="toc-text">例二</span></a></li></ol></li></ol>
-		
-		</div>
-		
-		<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给三个数 N, A and B.(1&lt;=N&lt;=1000000000, 1&lt;=A,B&lt;=100000).  求 Σ| n%A - n%B |  （n=0至N-1）</p>
-<a id="more"></a>
-<h2 id="思路-详解"><a href="#思路-详解" class="headerlink" title="思路+详解"></a>思路+详解</h2><p>N太大，如果直接暴力求和，肯定超时。所以肯定要用比较巧妙的方法。</p>
-<p>（以下的例子都是 A比B小）</p>
-<h3 id="例一"><a href="#例一" class="headerlink" title="例一"></a>例一</h3><p>我们先来考虑一对互质的 A1=2 和 B1=3，它们的最小公倍数是A*B=6，现在我们看下面的表格：</p>
-<p>我们把 0 到 5 放入了表格中</p>
-<p>【表1】A1=2</p>
-<table>
-<thead>
-<tr>
-<th>余数</th>
-<th>0</th>
-<th>1            </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td></td>
-<td>2</td>
-<td>3</td>
-</tr>
-<tr>
-<td></td>
-<td>4</td>
-<td>5</td>
-</tr>
-</tbody>
-</table>
-<p>【表2】B1=3</p>
-<table>
-<thead>
-<tr>
-<th>余数</th>
-<th>0</th>
-<th>1</th>
-<th>2        </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>[ 0</td>
-<td>1 ]</td>
-<td>[ 2</td>
-</tr>
-<tr>
-<td></td>
-<td>3 ]</td>
-<td>[ 4</td>
-<td>5]    </td>
-</tr>
-</tbody>
-</table>
-<p>根据【表1】 我们人为的把【表2】分为3组，这3组分别是【表1】里面的3排 [0 1]、[2 3]、[4 5]，同时我们也可以看见这3组分别的第一个元素在【表2】中的余数各不相同。<br>我们开一个大小为B1的数组 num。</p>
-<p>【表3】<br>（注1：组的第一个元素 对B取模 是数组的下标）<br>（注2：值为 Σ| n%A - n%B |  n取对应组中的所有元素 ）</p>
-<table>
-<thead>
-<tr>
-<th>数组元素</th>
-<th>组</th>
-<th>值Σ｜n%A-n%B｜</th>
-<th>公式</th>
-<th>公式应用范围</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>num[0]</td>
-<td>[0 1]</td>
-<td>0</td>
-<td>0</td>
-<td>数组下标为0   </td>
-</tr>
-<tr>
-<td>num[1]</td>
-<td>[4 5]</td>
-<td>2*1 =2</td>
-<td>A * 数组下标</td>
-<td>数组下标从1到（B-A）</td>
-</tr>
-<tr>
-<td>num[2]</td>
-<td>[2 3]</td>
-<td>1*2 + (3-2)*1=3</td>
-<td>(A-k)*数组下标 +（B-数组下标）*k</td>
-<td>数组下标从（B-A+1）到结束</td>
-<td>这里的k从1开始累加</td>
-</tr>
-</tbody>
-</table>
-<h3 id="例二"><a href="#例二" class="headerlink" title="例二"></a>例二</h3><p>现在我们在来看一对不互质的情况，我们都知道不互质的数在除以他们的最大公约数之后就互质了，我们令A2=6，B2=9,，这里A和B的值恰好是上面A1 B1的3倍，也就是说A2 B2的最大公约数是3，最小公倍数是18，现在我们看下面的2个表格：</p>
-<p>我们把 0 到 17 放入了表格中</p>
-<table>
-<thead>
-<tr>
-<th>余数(A2=6)</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5                             </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>0</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td>5    </td>
-</tr>
-<tr>
-<td></td>
-<td>6</td>
-<td>7</td>
-<td>8</td>
-<td>9</td>
-<td>10</td>
-<td>11 </td>
-</tr>
-<tr>
-<td></td>
-<td>12</td>
-<td>13</td>
-<td>14</td>
-<td>15</td>
-<td>16</td>
-<td>17    </td>
-</tr>
-</tbody>
-</table>
-<table>
-<thead>
-<tr>
-<th>余数    (B2=9)</th>
-<th>0</th>
-<th>1</th>
-<th>2</th>
-<th>3</th>
-<th>4</th>
-<th>5</th>
-<th>6</th>
-<th>7</th>
-<th>8    </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>[ 0</td>
-<td>1</td>
-<td>2</td>
-<td>3</td>
-<td>4</td>
-<td>5 ]</td>
-<td>[ 6</td>
-<td>7</td>
-<td>8    </td>
-</tr>
-<tr>
-<td></td>
-<td>9</td>
-<td>10</td>
-<td>11]</td>
-<td>[12</td>
-<td>13</td>
-<td>14</td>
-<td>15</td>
-<td>16</td>
-<td>17]</td>
-</tr>
-</tbody>
-</table>
-<p>你会发现这里的每一组的值等于【例一】中对应组的值 乘以 3（3是他们的最大公约数）的平方：</p>
-<pre><code>[0    1    2    3    4    5]的值为    0
-[6    7    8    9   10  11] 的值为    【例一】中 [2 3]的值乘以 3^2  = 27
-[12  13  14  15  16  17]     的值为    【例一】中 [4 5]的值乘以 3^2 = 18  
-</code></pre><p>有了上面的分析，现在我们只要2次求商取余，再将剩余部分直接统计，即可得答案。<br>此外，很多中间过程会超int，最好都long long 吧，本人被坑了很久。 </p>
-<p>　</p>
-<p>　</p>
-<hr>
-<p><strong>版权声明</strong></p>
-<p>本文首发于 <a href="hzc199307.github.io" title="贺智超的博客">贺智超的博客</a>（<a href="http://hezhichao.cn/" title="http://hezhichao.cn/">http://hezhichao.cn/</a> or <a href="http://hzc199307.github.io" title="http://hzc199307.github.io" target="_blank" rel="external">http://hzc199307.github.io</a>），转载请注明出处。</p>
-<p>本文链接：<a href="http://hezhichao.cn/acm/solution_report/hdoj4611/">http://hezhichao.cn/acm/solution_report/hdoj4611/</a><br>永久链接：<a href="http://hzc199307.github.io/acm/solution_report/hdoj4611/" target="_blank" rel="external">http://hzc199307.github.io/acm/solution_report/hdoj4611/</a></p>
-  
-	</div>
-		<footer class="article-footer clearfix">
+    <div class="article-content">
+        
+        <p>发现此题资料甚少，斗胆第一次写一份解题报告</p>
+<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>输入 n（代表二进制位数） k（代表黑条白条总共有几条，条形码是以黑条开始的，再白黑交替出现） m（代表每条最多占多少个二进制位）<br>输出这种模式的条形码的有多少个？</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/acm/solution_report/poj1173/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
 <div class="article-catetags">
 
 <div class="article-categories">
@@ -319,64 +128,141 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ACM/">ACM</a><a href="/tags/hdoj/">hdoj</a><a href="/tags/数学/">数学</a>
+  <span></span> <a href="/tags/ACM/">ACM</a><a href="/tags/poj/">poj</a><a href="/tags/动态规划/">动态规划</a><a href="/tags/组合数学/">组合数学</a>
   </div>
 
 </div>
 
 
 
-	<div class="article-share" id="share">
-	
-	  <div data-url="http://hezhichao.cn/acm/solution_report/hdoj4611/" data-title="hdoj4611解题报告 | Forward" data-tsina="null" class="share clearfix">
-	  </div>
-	
-	</div>
 
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/acm/solution_report/poj1173/#comments" class="ds-thread-count comments-count-link" data-thread-key="acm/solution_report/poj1173/" data-count-type="comments">
+			<!-- 多说js加载开始，一个页面只需要加载一次 -->
+			<script type="text/javascript">
+			var duoshuoQuery = {short_name:"hzc199307"};
+			(function() {
+				var ds = document.createElement('script');
+				ds.type = 'text/javascript';ds.async = true;
+				ds.src = 'http://static.duoshuo.com/embed.js';
+				ds.charset = 'UTF-8';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+			})();
+			</script>
+			<!-- 多说js加载结束，一个页面只需要加载一次 -->
+		</a>
+	
+</div>
 
 </footer>
 
-   	       
-	</article>
-	
-<nav class="article-nav clearfix">
- 
- <div class="prev" >
- <a href="/travel/singapore/sentosa/" title="圣淘沙之旅（一）">
-  <strong>上一篇：</strong><br/>
-  <span>
-  圣淘沙之旅（一）</span>
-</a>
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name" class="article-title">
+    
+      <a href="/tech/hexo/hello-world/" title="Hello World" itemprop="url" class="article-url">Hello World</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="HeZhichao" target="_blank" itemprop="author">HeZhichao</a>
+		
+  </p>
+		
+  <p class="article-time">
+    
+			<time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
+    
+		<!--用于显示浏览数-->
+        &nbsp;/&nbsp; <span class="article-pageview">?</span> views
+  </p>
+  
+<!--
+  <p class="article-time">
+    <time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
+    
+  </p>
+-->
+
+</header>
+    <div class="article-content">
+        
+        <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+        
+        
+        <p class="article-more-link">
+          
+            <a href="/tech/hexo/hello-world/#more">Read More</a>
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>►<a class="article-category-link" href="/categories/Tech/Hexo/">Hexo</a>
 </div>
 
 
-<div class="next">
-<a href="/acm/solution_report/poj1173/"  title="poj1173解题报告">
- <strong>下一篇：</strong><br/> 
- <span>poj1173解题报告
-</span>
-</a>
-</div>
-
-</nav>
-
-	
-<section id="comments" class="comment">
-	<div class="ds-thread" data-thread-key="acm/solution_report/hdoj4611/" data-title="hdoj4611解题报告" data-url="http://hezhichao.cn/acm/solution_report/hdoj4611/"></div>
-</section>
-
-
-
-
-</div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
-
-  <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
- 
- <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#题意"><span class="toc-number">1.</span> <span class="toc-text">题意</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#思路-详解"><span class="toc-number">2.</span> <span class="toc-text">思路+详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#例一"><span class="toc-number">2.1.</span> <span class="toc-text">例一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#例二"><span class="toc-number">2.2.</span> <span class="toc-text">例二</span></a></li></ol></li></ol>
- 
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Hexo/">Hexo</a>
   </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+	  	<span></span>
+		<a href="/tech/hexo/hello-world/#comments" class="ds-thread-count comments-count-link" data-thread-key="tech/hexo/hello-world/" data-count-type="comments">
+			<!-- 多说js加载开始，一个页面只需要加载一次 -->
+			<script type="text/javascript">
+			var duoshuoQuery = {short_name:"hzc199307"};
+			(function() {
+				var ds = document.createElement('script');
+				ds.type = 'text/javascript';ds.async = true;
+				ds.src = 'http://static.duoshuo.com/embed.js';
+				ds.charset = 'UTF-8';
+				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+			})();
+			</script>
+			<!-- 多说js加载结束，一个页面只需要加载一次 -->
+		</a>
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+
+  <nav id="page-nav" class="clearfix">
+    <a class="extend prev" rel="prev" href="/"><span></span>Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+  </nav>
+
+</div>
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
 
 <div id="asidepart">
 <div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
@@ -591,103 +477,14 @@ $(document).ready(function(){
       m.removeClass('moveMain');
       a.css('display', 'block').removeClass('fadeOut');
       o.css('display', 'none');
-      
-      $('#toc.toc-aside').css('display', 'none');
         
     }
   });
 });
 </script>
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var ai = $('.article-content>iframe'),
-      ae = $('.article-content>embed'),
-      t  = $('#toc'),
-      ta = $('#toc.toc-aside'),
-      o  = $('.openaside'),
-      c  = $('.closeaside');
-  if(ai.length>0){
-    ai.wrap('<div class="video-container" />');
-  };
-  if(ae.length>0){
-   ae.wrap('<div class="video-container" />');
-  };
-  c.click(function(){
-    ta.css('display', 'block').addClass('fadeIn');
-  });
-  o.click(function(){
-    ta.css('display', 'none');
-  });
-  $(window).scroll(function(){
-    ta.css("top",Math.max(140,320-$(this).scrollTop()));
-  });
-});
-</script>
 
 
-<script type="text/javascript">
-$(document).ready(function(){ 
-  var $this = $('.share'),
-      url = $this.attr('data-url'),
-      encodedUrl = encodeURIComponent(url),
-      title = $this.attr('data-title'),
-      tsina = $this.attr('data-tsina'),
-      description = $this.attr('description');
-  var html = [
-  '<div class="hoverqrcode clearfix"></div>',
-  '<a class="overlay" id="qrcode"></a>',
-  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
-  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
-  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
-  '<span title="Share to"></span>'
-  ].join('');
-  $this.append(html);
-
-  $('.hoverqrcode').hide();
-
-  var myWidth = 0;
-  function updatehoverqrcode(){
-    if( typeof( window.innerWidth ) == 'number' ) {
-      myWidth = window.innerWidth;
-    } else if( document.documentElement && document.documentElement.clientWidth) {
-      myWidth = document.documentElement.clientWidth;
-    };
-    var qrsize = myWidth > 1024 ? 200:100;
-    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
-    var p = $('.article-share-qrcode').position();
-    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
-                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
-                          .qrcode(options);
-  };
-  $(window).resize(function(){
-    $('.hoverqrcode').hide();
-  });
-  $('.article-share-qrcode').click(function(){
-    updatehoverqrcode();
-    $('.hoverqrcode').toggle();
-  });
-  $('.article-share-qrcode').hover(function(){}, function(){
-      $('.hoverqrcode').hide();
-  });
-});   
-</script>
-
-
-
-<script type="text/javascript">
-  var duoshuoQuery = {short_name:"hzc199307"};
-  (function() {
-    var ds = document.createElement('script');
-    ds.type = 'text/javascript';ds.async = true;
-    ds.src = '//static.duoshuo.com/embed.js';
-    ds.charset = 'UTF-8';
-    (document.getElementsByTagName('head')[0] 
-    || document.getElementsByTagName('body')[0]).appendChild(ds);
-  })();
-</script> 
 
 
 
@@ -925,4 +722,4 @@ var _hmt = _hmt || [];
 <!-- Lean Cloud End -->
 <!-- Lean Cloud End -->
   </body>
-</html>
+ </html>

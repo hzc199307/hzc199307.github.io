@@ -81,84 +81,6 @@
         <header class="article-info clearfix">
   <h1 itemprop="name" class="article-title">
     
-      <a href="/acm/solution_report/hdoj4611/" title="" itemprop="url" class="article-url"></a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="HeZhichao" target="_blank" itemprop="author">HeZhichao</a>
-		
-  </p>
-		
-  <p class="article-time">
-    
-			<time datetime="2016-05-07T09:59:30.962Z" itemprop="datePublished"> Published 2016-05-07</time>
-    
-		<!--用于显示浏览数-->
-        &nbsp;/&nbsp; <span class="article-pageview">?</span> views
-  </p>
-  
-<!--
-  <p class="article-time">
-    <time datetime="2016-05-07T09:59:30.962Z" itemprop="datePublished"> Published 2016-05-07</time>
-    
-  </p>
--->
-
-</header>
-    <div class="article-content">
-        
-        
-        
-        
-        <p class="article-more-link">
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/acm/solution_report/hdoj4611/#comments" class="ds-thread-count comments-count-link" data-thread-key="acm/solution_report/hdoj4611/" data-count-type="comments">
-			<!-- 多说js加载开始，一个页面只需要加载一次 -->
-			<script type="text/javascript">
-			var duoshuoQuery = {short_name:"hzc199307"};
-			(function() {
-				var ds = document.createElement('script');
-				ds.type = 'text/javascript';ds.async = true;
-				ds.src = 'http://static.duoshuo.com/embed.js';
-				ds.charset = 'UTF-8';
-				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-			})();
-			</script>
-			<!-- 多说js加载结束，一个页面只需要加载一次 -->
-		</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name" class="article-title">
-    
       <a href="/deeplearning/app/neural-art/" title="基于DNN的艺术风格生成算法的应用" itemprop="url" class="article-url">基于DNN的艺术风格生成算法的应用</a>
   </h1>
   <p class="article-author">By
@@ -341,7 +263,7 @@
         <header class="article-info clearfix">
   <h1 itemprop="name" class="article-title">
     
-      <a href="/acm/solution_report/poj1173/" title="poj1173" itemprop="url" class="article-url">poj1173</a>
+      <a href="/acm/solution_report/hdoj4611/" title="hdoj4611解题报告" itemprop="url" class="article-url">hdoj4611解题报告</a>
   </h1>
   <p class="article-author">By
        
@@ -351,7 +273,7 @@
 		
   <p class="article-time">
     
-			<time datetime="2013-07-20T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-21</time>
+			<time datetime="2013-07-25T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-26</time>
     
 		<!--用于显示浏览数-->
         &nbsp;/&nbsp; <span class="article-pageview">?</span> views
@@ -359,7 +281,7 @@
   
 <!--
   <p class="article-time">
-    <time datetime="2013-07-20T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-21</time>
+    <time datetime="2013-07-25T16:00:00.000Z" itemprop="datePublished"> Published 2013-07-26</time>
     
   </p>
 -->
@@ -367,128 +289,12 @@
 </header>
     <div class="article-content">
         
-        <p>发现此题资料甚少，斗胆第一次写一份解题报告</p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>输入 n（代表二进制位数） k（代表黑条白条总共有几条，条形码是以黑条开始的，再白黑交替出现） m（代表每条最多占多少个二进制位）<br>输出这种模式的条形码的有多少个？</p>
-<p>输入s，再输入s个二进制形式的条形码<br>输出每个条形码在该模式中的序号，序号是根据二进制条形码的十进制数值排序，序号从0开始。</p>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><p>动态规划+组合数学。</p>
-<p>我们举一个例子：n=7，k=4，m=3。</p>
-<p><strong>1.计算个数</strong></p>
-<p>要计算此模式条形码的数量，那么我们只要分别计算出</p>
-<pre><code>n=6，k=3，m=3。
-n=5，k=3，m=3。
-n=4，k=3，m=3。
-</code></pre><p>再将他们相加即可。</p>
-<p>扩展到一般，得公式 [n，k] = ∑[n-i，k-1]（i = 1，2···m-1，m）</p>
-<p>根据推算，我们可以将公式化简成  [n,k] = [n-1,k] + [n-1,k-1] - [n-m-1,k-1] </p>
-<p>我们令[0,0]=1,   令 [0,1]至[0,k]  和 [1,0]至[k,0] =0，其余的值都可以通过递推得到</p>
-<p><strong>2.计算序号</strong></p>
-<p>首先将 长度为n的二进制条形码 转换成 长度为k的向量，例如 1101110 -》 2131（2个1，1个0，3个1，1个0）<br>2131之前的条形码可以分为四部分：</p>
-<pre><code>1???    [6,3] = 7
-22??    [3,2] = 1
-23??    [2,2] = 2
-211?    [3,1] = 1
-212?    [2,1] = 1
-</code></pre><p>合计为12,对照下面题目给出的表,确是如此 !   </p>
-<p>至于究竟上面是如何弄出来的，需要分黑条和白条分别考虑，不是很好说明，看代码应该能懂。<br>还有一点，我们都知道0在二进制位里面越前，1越后，则该数值会越小（即序号越小）。</p>
-<pre><code>0: 1000100 | 8: 1100100
-1: 1000110 | 9: 1100110
-2: 1001000 | 10: 1101000
-3: 1001100 | 11: 1101100
-4: 1001110 | 12: 1101110
-5: 1011000 | 13: 1110010
-6: 1011100 | 14: 1110100
-7: 1100010 | 15: 1110110
-</code></pre><h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre><code>#include &lt;iostream&gt;
-using namespace std;
-
-int n,k,m;
-int dp[40][40]={0};//下标分别对应着 n+1 和 k+1
-int s;
-char bin[40];//存储每次输入的二进制串
-int vec[40];//将二进制的bin数组 转换成 k部分的向量
-int count[102];
-
-void table()//打表 计算还剩 n位 和 k部分时 有多少种情况
-{
-    dp[0][0]=1;
-    for(int j=1;j&lt;=k;j++)//一列列的计算
-        for(int i=1;i&lt;=n;i++)
-        {
-            dp[i][j]=dp[i-1][j]+dp[i-1][j-1];//等于 左上和上面 这2个之和
-            if(i-m-1&gt;=0)
-                dp[i][j]-=dp[i-m-1][j-1];
-        }
-}
-
-void binToVec()//将二进制的bin数组 转换成 k部分的向量 并且保存到vec数组中
-{
-    int c=0;
-    char first;
-    for(int i=0,j=0;i&lt;n;i--)
-    {
-        c=1;
-        first=bin[i++];
-        while(bin[i++]==first)
-        {
-            c++;
-        }
-        vec[j++]=c;
-    }
-}
-
-int countOrder()//计算该二进制的序号
-{
-    int count = 0;
-    for(int i=0,u=n;i&lt;k-1;i++)
-    {
-        if(i%2==0)//针对编码为1的部分
-        {
-            for(int j=1;j&lt;vec[i];j++)
-            {
-                if(u&gt;=j)
-                    count+=dp[u-j][k-i-1];
-            }
-        }
-        else//针对编码为0的部分
-        {
-            for(int j=m;j&gt;vec[i];j--)
-            {
-                if(u&gt;=j)
-                    count+=dp[u-j][k-i-1];
-            }
-        }
-        u-=vec[i];
-    }
-    return count;
-}
-
-int main()
-{
-    cin&gt;&gt;n&gt;&gt;k&gt;&gt;m;
-    table();
-    cin&gt;&gt;s;
-    for(int i=0;i&lt;s;i++)
-    {
-        cin&gt;&gt;bin;
-        binToVec();
-        count[i] = countOrder();
-    }
-    cout&lt;&lt;dp[n][k]&lt;&lt;endl;//输出总共有多少种
-    for(int i=0;i&lt;s;i++)//输出相应二进制编码的序号
-    {
-        cout&lt;&lt;count[i]&lt;&lt;endl;
-    }
-}
-</code></pre><p>　</p>
-<p>　</p>
-<hr>
-<p><strong>版权声明</strong></p>
-<p>本文首发于 <a href="hzc199307.github.io" title="贺智超的博客">贺智超的博客</a>（<a href="http://hezhichao.cn/" title="http://hezhichao.cn/">http://hezhichao.cn/</a> or <a href="http://hzc199307.github.io" title="http://hzc199307.github.io" target="_blank" rel="external">http://hzc199307.github.io</a>），转载请注明出处。</p>
-<p>本文链接：<a href="http://hezhichao.cn/acm/solution_report/poj1173/">http://hezhichao.cn/acm/solution_report/poj1173/</a><br>永久链接：<a href="http://hzc199307.github.io/acm/solution_report/poj1173/" target="_blank" rel="external">http://hzc199307.github.io/acm/solution_report/poj1173/</a></p>
-
+        <h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给三个数 N, A and B.(1&lt;=N&lt;=1000000000, 1&lt;=A,B&lt;=100000).  求 Σ| n%A - n%B |  （n=0至N-1）</p>
         
         
         <p class="article-more-link">
+          
+            <a href="/acm/solution_report/hdoj4611/#more">Read More</a>
           
        </p>
     </div>
@@ -503,7 +309,7 @@ int main()
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/ACM/">ACM</a><a href="/tags/poj/">poj</a><a href="/tags/动态规划/">动态规划</a><a href="/tags/组合数学/">组合数学</a>
+  <span></span> <a href="/tags/ACM/">ACM</a><a href="/tags/hdoj/">hdoj</a><a href="/tags/数学/">数学</a>
   </div>
 
 </div>
@@ -514,7 +320,7 @@ int main()
 <div class="comments-count">
 	
 	  	<span></span>
-		<a href="/acm/solution_report/poj1173/#comments" class="ds-thread-count comments-count-link" data-thread-key="acm/solution_report/poj1173/" data-count-type="comments">
+		<a href="/acm/solution_report/hdoj4611/#comments" class="ds-thread-count comments-count-link" data-thread-key="acm/solution_report/hdoj4611/" data-count-type="comments">
 			<!-- 多说js加载开始，一个页面只需要加载一次 -->
 			<script type="text/javascript">
 			var duoshuoQuery = {short_name:"hzc199307"};
@@ -541,96 +347,10 @@ int main()
 
 
 
-   
-    
-    <article class="post-expand post" itemprop="articleBody"> 
-        <header class="article-info clearfix">
-  <h1 itemprop="name" class="article-title">
-    
-      <a href="/tech/hexo/hello-world/" title="Hello World" itemprop="url" class="article-url">Hello World</a>
-  </h1>
-  <p class="article-author">By
-       
-		<a href="/about" title="HeZhichao" target="_blank" itemprop="author">HeZhichao</a>
-		
-  </p>
-		
-  <p class="article-time">
-    
-			<time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
-    
-		<!--用于显示浏览数-->
-        &nbsp;/&nbsp; <span class="article-pageview">?</span> views
-  </p>
-  
-<!--
-  <p class="article-time">
-    <time datetime="1993-07-12T16:00:00.000Z" itemprop="datePublished"> Published 1993-07-13</time>
-    
-  </p>
--->
 
-</header>
-    <div class="article-content">
-        
-        <p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-        
-        
-        <p class="article-more-link">
-          
-            <a href="/tech/hexo/hello-world/#more">Read More</a>
-          
-       </p>
-    </div>
-    <footer class="article-footer clearfix">
-<div class="article-catetags">
-
-<div class="article-categories">
-  <span></span>
-  <a class="article-category-link" href="/categories/Tech/">Tech</a>►<a class="article-category-link" href="/categories/Tech/Hexo/">Hexo</a>
-</div>
-
-
-  <div class="article-tags">
-  
-  <span></span> <a href="/tags/Hexo/">Hexo</a>
-  </div>
-
-</div>
-
-
-
-
-<div class="comments-count">
-	
-	  	<span></span>
-		<a href="/tech/hexo/hello-world/#comments" class="ds-thread-count comments-count-link" data-thread-key="tech/hexo/hello-world/" data-count-type="comments">
-			<!-- 多说js加载开始，一个页面只需要加载一次 -->
-			<script type="text/javascript">
-			var duoshuoQuery = {short_name:"hzc199307"};
-			(function() {
-				var ds = document.createElement('script');
-				ds.type = 'text/javascript';ds.async = true;
-				ds.src = 'http://static.duoshuo.com/embed.js';
-				ds.charset = 'UTF-8';
-				(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
-			})();
-			</script>
-			<!-- 多说js加载结束，一个页面只需要加载一次 -->
-		</a>
-	
-</div>
-
-</footer>
-
-
-    </article>
-
-
-
-
-
-
+  <nav id="page-nav" class="clearfix">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next<span></span></a>
+  </nav>
 
 </div>
       <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
@@ -667,7 +387,7 @@ int main()
   
 <div class="category-list" >
 	<p class="asidetitle" >Categories</p>
-		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/">ACM</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/SolutionReport/">SolutionReport</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Research/">Research</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/">DeepLearning</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/APP/">APP</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/">Tech</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/Hexo/">Hexo</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/">Travel</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/Singapore/">Singapore</a><span class="category-list-count">1</span></li></ul></li></ul> 
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/">ACM</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/SolutionReport/">SolutionReport</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Research/">Research</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/">DeepLearning</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/APP/">APP</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/">Tech</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/Hexo/">Hexo</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/">Travel</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/Singapore/">Singapore</a><span class="category-list-count">1</span></li></ul></li></ul> 
 </div>
  
 
@@ -677,7 +397,23 @@ int main()
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/ACM/" title="ACM">ACM<sup>1</sup></a></li>
+				<li><a href="/tags/ACM/" title="ACM">ACM<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动态规划/" title="动态规划">动态规划<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Singapore/" title="Singapore">Singapore<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hdoj/" title="hdoj">hdoj<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数学/" title="数学">数学<sup>1</sup></a></li>
 			
 		
 			
@@ -685,7 +421,7 @@ int main()
 			
 		
 			
-				<li><a href="/tags/动态规划/" title="动态规划">动态规划<sup>1</sup></a></li>
+				<li><a href="/tags/Travel/" title="Travel">Travel<sup>1</sup></a></li>
 			
 		
 			
@@ -694,14 +430,6 @@ int main()
 		
 			
 				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Singapore/" title="Singapore">Singapore<sup>1</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Travel/" title="Travel">Travel<sup>1</sup></a></li>
 			
 		
 			
