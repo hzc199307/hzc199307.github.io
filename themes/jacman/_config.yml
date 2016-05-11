@@ -12,13 +12,14 @@ menu:
 
 #### Widgets
 widgets: 
-- github-card
+- links
+#- github-card
 - categories
 #- category
 - tag
 - popular_posts
+- sunzhengyang
 - visitors
-#- links
 #- douban
 #- rss
 #- weibo
@@ -84,8 +85,16 @@ toc:
 
 #### Links
 links:
+  My CSDN Blog: http://blog.csdn.net/hzc199307
+  Ino's Blog: http://ino.design/
+  GentleH's Jianshu: http://www.jianshu.com/users/936b8a35c7ed/latest_articles
+  Liu Zihua's Blog: http://huozi07.github.io/liuzihuaresume/
   #码农圈: https://coderq.com,一个面向程序员交流分享的新一代社区
   #Jark's Blog: http://wuchong.me
+  
+### sunzhengyang
+sunzhengyang:
+  第一章 梦回当初: http://www.jianshu.com/p/808173c88ceb
 
 
 
@@ -123,7 +132,8 @@ totop: true           ## if you want to scroll to top in every post set the valu
 #### Custom Search
 google_cse: 
   enable: true
-  cx: 000981288436307906044:jcmg6xaswca
+  cx: 000981288436307906044:rwst5rezofu
+  #000981288436307906044:jcmg6xaswca
   ## e.g. 018294693190868310296:abnhpuysycw your Custom Search ID.
 ## https://www.google.com/cse/ 
 ## To enable the custom search You must create a "search" folder in '/source' and a "index.md" file

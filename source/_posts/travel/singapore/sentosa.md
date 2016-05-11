@@ -5,7 +5,7 @@ categories:
 	- Travel
 	- Singapore
 tags: [Singapore,Travel]
-permalink: #hezhichao
+copyright: false
 ---
 刚入新加坡时，便被圣淘沙的名字所吸引。
 

@@ -1,0 +1,14 @@
+<div class="linkslist">
+  <p class="asidetitle"><%= __('《孙正扬秘史》') %><sup><%= __('作者：GentleH™') %></class="asidetitle"></p>
+    <ul>
+        <% for (var i in theme.sunzhengyang){ %>
+          <li>
+            <% if(theme.sunzhengyang[i].indexOf(",") > 0) { %>
+            	<a href="<%- theme.sunzhengyang[i].split(",")[0] %>" target="_blank" title="<%- theme.sunzhengyang[i].split(",")[1] %>"><%= i %></a>
+            <% }else{ %>
+            	<a href="<%- theme.sunzhengyang[i] %>" target="_blank" title="<%= i %>"><%= i %></a>
+            <% } %>
+          </li>
+        <% } %>
+    </ul>
+</div>
