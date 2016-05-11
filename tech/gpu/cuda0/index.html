@@ -1,0 +1,786 @@
+
+ <!DOCTYPE HTML>
+<html >
+<head>
+  <meta charset="UTF-8">
+  
+    <title>CUDA入门 | Forward</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="HeZhichao">
+    
+
+    
+    <meta name="description" content="CUDA安装在网上的教程很多，这里就不再详述。此外，笔者也是今天才开始写cuda的代码，所以内容上只是简单总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA入门">
+<meta property="og:url" content="http://hezhichao.cn/tech/gpu/cuda0/index.html">
+<meta property="og:site_name" content="Forward">
+<meta property="og:description" content="CUDA安装在网上的教程很多，这里就不再详述。此外，笔者也是今天才开始写cuda的代码，所以内容上只是简单总结。">
+<meta property="og:updated_time" content="2016-05-11T16:27:56.065Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CUDA入门">
+<meta name="twitter:description" content="CUDA安装在网上的教程很多，这里就不再详述。此外，笔者也是今天才开始写cuda的代码，所以内容上只是简单总结。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Forward" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/faviconlogo.jpg">
+    
+    
+    <link rel="apple-touch-icon" href="/img/faviconlogo.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/faviconlogo.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/faviconlogo.jpg" alt="Forward" title="Forward"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Forward">Forward</a></h1>
+				<h2 class="blog-motto">To be a Practical Idealist</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">Me</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="/search/index.html" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" autocomplete="off" name="q" maxlength="20" placeholder="搜索" />
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name" class="article-title">
+    
+      <a href="/tech/gpu/cuda0/" title="CUDA入门" itemprop="url" class="article-url">CUDA入门</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="HeZhichao" target="_blank" itemprop="author">HeZhichao</a>
+		
+  </p>
+		
+  <p class="article-time">
+    
+			<time datetime="2016-05-10T16:00:00.000Z" itemprop="datePublished"> 发表于 2016-05-11</time>
+    
+		<!--用于显示浏览数-->
+        &nbsp;/&nbsp; <span class="article-pageview">?</span> views
+  </p>
+  
+<!--
+  <p class="article-time">
+    <time datetime="2016-05-10T16:00:00.000Z" itemprop="datePublished"> 发表于 2016-05-11</time>
+    
+  </p>
+-->
+
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识CUDA"><span class="toc-number">1.</span> <span class="toc-text">初识CUDA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#部分函数介绍"><span class="toc-number">1.1.</span> <span class="toc-text">部分函数介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cudaDeviceProp结构"><span class="toc-number">1.2.</span> <span class="toc-text">cudaDeviceProp结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译"><span class="toc-number">1.3.</span> <span class="toc-text">编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用GPU实现数组平方和"><span class="toc-number">2.</span> <span class="toc-text">使用GPU实现数组平方和</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用GPU的简单实现"><span class="toc-number">2.1.</span> <span class="toc-text">用GPU的简单实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进1：多线程"><span class="toc-number">2.2.</span> <span class="toc-text">改进1：多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进2：使内存的整体读取连续"><span class="toc-number">2.3.</span> <span class="toc-text">改进2：使内存的整体读取连续</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进3：多block多thread"><span class="toc-number">2.4.</span> <span class="toc-text">改进3：多block多thread</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进4：使用block的共享内存"><span class="toc-number">2.5.</span> <span class="toc-text">改进4：使用block的共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进5：加法树"><span class="toc-number">2.6.</span> <span class="toc-text">改进5：加法树</span></a></li></ol></li></ol>
+		
+		</div>
+		
+		<p>CUDA安装在网上的教程很多，这里就不再详述。此外，笔者也是今天才开始写cuda的代码，所以内容上只是简单总结。</p>
+<a id="more"></a>
+<h1 id="初识CUDA"><a href="#初识CUDA" class="headerlink" title="初识CUDA"></a>初识CUDA</h1><p>CUDA 目前有两种不同的 API：Runtime API 和 Driver API，两种 API 各有其适用的范围。由于 runtime API 较容易使用，一开始我们会以 runetime API 为主。所以代码开头加上#include <cuda_runtime.h>。</cuda_runtime.h></p>
+<p>以为CUDA语言基于C，里面涉及到很多指针的操作，C不熟悉的话可以先复习一下指针的使用。</p>
+<h2 id="部分函数介绍"><a href="#部分函数介绍" class="headerlink" title="部分函数介绍"></a>部分函数介绍</h2><p>1.cudaError_t cudaGetDeviceCount( int* count )<br>通过count返回可用于计算的设备数量。</p>
+<p>2.cudaError_t cudaGetDeviceProperties( struct cudaDeviceProp* prop,int dev )<br>通过prop返回第dev台设备的属性，dev编号从0开始。</p>
+<p>3.cudaError_t cudaSetDevice(int dev)<br>设置第dev台为执行设备。</p>
+<h2 id="cudaDeviceProp结构"><a href="#cudaDeviceProp结构" class="headerlink" title="cudaDeviceProp结构"></a>cudaDeviceProp结构</h2><pre><code>struct cudaDeviceProp {
+
+    char name [256];            //用于标识设备的ASCII字符串;
+    size_t totalGlobalMem;        //设备上可用的全局存储器的总量,以字节为单位;
+    size_t sharedMemPerBlock;    /*线程块可以使用的共享存储器的最大值,以字节为单位;
+                                  多处理器上的所有线程块可以同时共享这些存储器;*/
+    int regsPerBlock;            /*线程块可以使用的32位寄存器的最大值;
+                                多处理器上的所有线程块可以同时共享这些寄存器;*/
+    int warpSize;                //按线程计算的warp块大小;
+    size_t memPitch;            /*允许通过cudaMallocPitch()为包含存储器区域的
+                                存储器复制函数分配的最大间距(pitch),以字节为单位;*/
+    int maxThreadsPerBlock;        //每个块中的最大线程数
+    int maxThreadsDim [3];        //块各个维度的最大值:
+    int maxGridSize [3];        //网格各个维度的最大值;
+    size_t totalConstMem;        //设备上可用的不变存储器总量,以字节为单位;
+    int major;                    //定义设备计算能力的主要修订号和次要修订号;
+    int minor;                    //
+    int clockRate;                //以千赫为单位的时钟频率;
+    size_t textureAlignment;    /*对齐要求;与textureAlignment字节对齐的
+                                纹理基址无需对纹理取样应用偏移;*/
+    int deviceOverlap;            /*如果设备可在主机和设备之间并发复制存储器,
+                                同时又能执行内核,则此值为 1;否则此值为 0;*/
+    int multiProcessorCount;    //设备上多处理器的数量。
+
+}
+</code></pre><h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p>nvcc 是 CUDA 的编译工具，它可以将 .cu 文件解析出在 GPU 和 host 上执行的部分.也就是说，它会帮忙把 GPU 上执行和主机上执行的代码区分开来，不需要我们手动去做了。在 GPU 执行的部分会通过 NVIDIA 提供的 编译器编译成中介码，主机执行的部分则调用 gcc 编译。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -o first_cuda first_cuda.cu</span><br></pre></td></tr></table></figure></p>
+<h1 id="使用GPU实现数组平方和"><a href="#使用GPU实现数组平方和" class="headerlink" title="使用GPU实现数组平方和"></a>使用GPU实现数组平方和</h1><h2 id="用GPU的简单实现"><a href="#用GPU的简单实现" class="headerlink" title="用GPU的简单实现"></a>用GPU的简单实现</h2><figure class="highlight c"><figcaption><span>squareSum2.cu</span><a href="/tech/gpu/cuda0/squareSum2.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/******************************************************************** </span><br><span class="line">##### File Name: squareSum2.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="comment">// ======== define area ========</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> DATA_SIZE 1048576 <span class="comment">// 1M</span></span></span><br><span class="line"><span class="comment">// ======== global area ========</span></span><br><span class="line"><span class="keyword">int</span> data[DATA_SIZE];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">( <span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span></span>;</span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>{</span><br><span class="line">    <span class="comment">// init CUDA device</span></span><br><span class="line">    <span class="keyword">if</span> (!InitCUDA()) { return <span class="number">0</span> ; }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"CUDA initialized.\n"</span> );</span><br><span class="line">    <span class="comment">// generate rand datas </span></span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    <span class="comment">// malloc space for datas in GPU</span></span><br><span class="line">    <span class="keyword">int</span> *gpuData, *sum;</span><br><span class="line">    <span class="keyword">clock_t</span> *time;</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE);</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, <span class="keyword">sizeof</span> ( int ));</span><br><span class="line">    cudaMalloc(( void **) &amp;time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>));</span><br><span class="line">    cudaMemcpy(gpuData, data, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    <span class="comment">// calculate the squares's sum</span></span><br><span class="line">    <span class="comment">//CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span></span><br><span class="line">    squaresSum&lt;&lt;&lt; <span class="number">1</span> , <span class="number">1</span> , <span class="number">0</span> &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    <span class="comment">// copy the result from GPU to HOST</span></span><br><span class="line">    <span class="keyword">int</span> result;</span><br><span class="line">    <span class="keyword">clock_t</span> time_used;</span><br><span class="line">    cudaMemcpy(&amp;result, sum, <span class="keyword">sizeof</span> ( int ), cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// free GPU spaces</span></span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    <span class="comment">// print result</span></span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(GPU) sum:%d time:%ld\n"</span> , result, time_used);</span><br><span class="line">    <span class="comment">// CPU calculate</span></span><br><span class="line">    result = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(CPU) sum:%d time:%ld\n"</span> , result, time_used);</span><br><span class="line">    return <span class="number">0</span> ;</span><br><span class="line">}</span><br><span class="line"><span class="comment">//__global__ means that this function run in GPU, there isn't any return value.</span></span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> <span class="keyword">sum_t</span> = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        <span class="keyword">sum_t</span> += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    *sum = <span class="keyword">sum_t</span>;</span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// ======== used to generate rand datas ========</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % <span class="number">10</span> ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">(<span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Device Name : %s.\n"</span>, prop.name);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalGlobalMem : %lu.\n"</span>, prop.totalGlobalMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sharedMemPerBlock : %lu.\n"</span>, prop.sharedMemPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"regsPerBlock : %d.\n"</span>, prop.regsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"warpSize : %d.\n"</span>, prop.warpSize);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"memPitch : %lu.\n"</span>, prop.memPitch);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsPerBlock : %d.\n"</span>, prop.maxThreadsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsDim[0 - 2] : %d %d %d.\n"</span>, prop.maxThreadsDim[<span class="number">0</span>], prop.maxThreadsDim[<span class="number">1</span>], prop.maxThreadsDim[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxGridSize[0 - 2] : %d %d %d.\n"</span>, prop.maxGridSize[<span class="number">0</span>], prop.maxGridSize[<span class="number">1</span>], prop.maxGridSize[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalConstMem : %lu.\n"</span>, prop.totalConstMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"major.minor : %d.%d.\n"</span>, prop.major, prop.minor);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"clockRate : %d.\n"</span>, prop.clockRate);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"textureAlignment : %lu.\n"</span>, prop.textureAlignment);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"deviceOverlap : %d.\n"</span>, prop.deviceOverlap);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"multiProcessorCount : %d.\n"</span>, prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="comment">//used to count the device numbers</span></span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the cuda device count</span></span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">0</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find the device &gt;= 1.X</span></span><br><span class="line">    <span class="keyword">bool</span> noDeviceSupport = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        <span class="keyword">if</span> (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            <span class="keyword">if</span> (prop.major &gt;= <span class="number">1</span>) {</span><br><span class="line">		noDeviceSupport = <span class="literal">false</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"****** Device No%d*********************************\n"</span>,i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if can't find the device</span></span><br><span class="line">    <span class="keyword">if</span> (noDeviceSupport == <span class="literal">true</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device supporting CUDA 1.x.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set cuda device</span></span><br><span class="line">    cudaSetDevice(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"Device No%d is selected.\n"</span>,<span class="number">0</span> );</span><br><span class="line"></span><br><span class="line">    return <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="改进1：多线程"><a href="#改进1：多线程" class="headerlink" title="改进1：多线程"></a>改进1：多线程</h2><figure class="highlight c"><figcaption><span>squareSum3.cu</span><a href="/tech/gpu/cuda0/squareSum3.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/******************************************************************** </span><br><span class="line">##### File Name: squareSum3.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="comment">// ======== define area ========</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> DATA_SIZE 1048576 <span class="comment">// 1M</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> THREAD_NUM 1024<span class="comment">//# define THREAD_NUM 1024 // thread num</span></span></span><br><span class="line"><span class="comment">// ======== global area ========</span></span><br><span class="line"><span class="keyword">int</span> data[DATA_SIZE];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">( <span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span></span>;</span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>{</span><br><span class="line">    <span class="comment">// init CUDA device</span></span><br><span class="line">    <span class="keyword">if</span> (!InitCUDA()) { return <span class="number">0</span> ; }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"CUDA initialized.\n"</span> );</span><br><span class="line">    <span class="comment">// generate rand datas </span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"test !\n"</span>);</span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    <span class="comment">// malloc space for datas in GPU</span></span><br><span class="line">    <span class="keyword">int</span> *gpuData;</span><br><span class="line">    <span class="keyword">int</span> *sum;</span><br><span class="line">    <span class="keyword">clock_t</span> *time;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc start !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc gpuData is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc sum is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>));</span><br><span class="line">    cudaMemcpy(gpuData, data, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMemcpy data to gpuData is ok !\n"</span>);</span><br><span class="line">    <span class="comment">// calculate the squares's sum</span></span><br><span class="line">    <span class="comment">//CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span></span><br><span class="line">    squaresSum&lt;&lt;&lt; <span class="number">1</span> , THREAD_NUM , <span class="number">0</span> &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    <span class="comment">// copy the result from GPU to HOST</span></span><br><span class="line">    <span class="keyword">int</span> result[THREAD_NUM];</span><br><span class="line">    <span class="keyword">clock_t</span> time_used;</span><br><span class="line">    cudaMemcpy(result, sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM, cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// free GPU spaces</span></span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    <span class="comment">// print result</span></span><br><span class="line">    <span class="keyword">int</span> tmp_result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;THREAD_NUM;++i){</span><br><span class="line">        tmp_result += result[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(GPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);</span><br><span class="line">    <span class="comment">// CPU calculate</span></span><br><span class="line">    tmp_result = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        tmp_result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(CPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);<span class="comment">/**/</span></span><br><span class="line">    return <span class="number">0</span> ;</span><br><span class="line">}</span><br><span class="line"><span class="comment">//__global__ means that this function run in GPU, there isn't any return value.</span></span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span> </span>{</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> size = DATA_SIZE / THREAD_NUM;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="keyword">int</span> tmp_sum = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = tid*size ; i &lt; (tid+<span class="number">1</span>)*size; ++i) {</span><br><span class="line">        tmp_sum += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    sum[tid] = tmp_sum;</span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// ======== used to generate rand datas ========</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"generateData !"</span>);</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % <span class="number">10</span> ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">(<span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Device Name : %s.\n"</span>, prop.name);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalGlobalMem : %lu.\n"</span>, prop.totalGlobalMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sharedMemPerBlock : %lu.\n"</span>, prop.sharedMemPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"regsPerBlock : %d.\n"</span>, prop.regsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"warpSize : %d.\n"</span>, prop.warpSize);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"memPitch : %lu.\n"</span>, prop.memPitch);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsPerBlock : %d.\n"</span>, prop.maxThreadsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsDim[0 - 2] : %d %d %d.\n"</span>, prop.maxThreadsDim[<span class="number">0</span>], prop.maxThreadsDim[<span class="number">1</span>], prop.maxThreadsDim[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxGridSize[0 - 2] : %d %d %d.\n"</span>, prop.maxGridSize[<span class="number">0</span>], prop.maxGridSize[<span class="number">1</span>], prop.maxGridSize[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalConstMem : %lu.\n"</span>, prop.totalConstMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"major.minor : %d.%d.\n"</span>, prop.major, prop.minor);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"clockRate : %d.\n"</span>, prop.clockRate);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"textureAlignment : %lu.\n"</span>, prop.textureAlignment);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"deviceOverlap : %d.\n"</span>, prop.deviceOverlap);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"multiProcessorCount : %d.\n"</span>, prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="comment">//used to count the device numbers</span></span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the cuda device count</span></span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">0</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find the device &gt;= 1.X</span></span><br><span class="line">    <span class="keyword">bool</span> noDeviceSupport = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        <span class="keyword">if</span> (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            <span class="keyword">if</span> (prop.major &gt;= <span class="number">1</span>) {</span><br><span class="line">		noDeviceSupport = <span class="literal">false</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"****** Device No%d*********************************\n"</span>,i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if can't find the device</span></span><br><span class="line">    <span class="keyword">if</span> (noDeviceSupport == <span class="literal">true</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device supporting CUDA 1.x.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set cuda device</span></span><br><span class="line">    cudaSetDevice(<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"Device No%d is selected.\n"</span>,<span class="number">4</span> );</span><br><span class="line"></span><br><span class="line">    return <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="改进2：使内存的整体读取连续"><a href="#改进2：使内存的整体读取连续" class="headerlink" title="改进2：使内存的整体读取连续"></a>改进2：使内存的整体读取连续</h2><figure class="highlight c"><figcaption><span>squareSum4.cu</span><a href="/tech/gpu/cuda0/squareSum4.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/******************************************************************** </span><br><span class="line">##### File Name: squareSum4.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="comment">// ======== define area ========</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> DATA_SIZE 1048576 <span class="comment">// 1M</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> THREAD_NUM 1024<span class="comment">//# define THREAD_NUM 1024 // thread num</span></span></span><br><span class="line"><span class="comment">// ======== global area ========</span></span><br><span class="line"><span class="keyword">int</span> data[DATA_SIZE];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">( <span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span></span>;</span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>{</span><br><span class="line">    <span class="comment">// init CUDA device</span></span><br><span class="line">    <span class="keyword">if</span> (!InitCUDA()) { return <span class="number">0</span> ; }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"CUDA initialized.\n"</span> );</span><br><span class="line">    <span class="comment">// generate rand datas </span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"test !\n"</span>);</span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    <span class="comment">// malloc space for datas in GPU</span></span><br><span class="line">    <span class="keyword">int</span> *gpuData;</span><br><span class="line">    <span class="keyword">int</span> *sum;</span><br><span class="line">    <span class="keyword">clock_t</span> *time;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc start !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc gpuData is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc sum is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>));</span><br><span class="line">    cudaMemcpy(gpuData, data, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMemcpy data to gpuData is ok !\n"</span>);</span><br><span class="line">    <span class="comment">// calculate the squares's sum</span></span><br><span class="line">    <span class="comment">//CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span></span><br><span class="line">    squaresSum&lt;&lt;&lt; <span class="number">1</span> , THREAD_NUM , <span class="number">0</span> &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    <span class="comment">// copy the result from GPU to HOST</span></span><br><span class="line">    <span class="keyword">int</span> result[THREAD_NUM];</span><br><span class="line">    <span class="keyword">clock_t</span> time_used;</span><br><span class="line">    cudaMemcpy(result, sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM, cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// free GPU spaces</span></span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    <span class="comment">// print result</span></span><br><span class="line">    <span class="keyword">int</span> tmp_result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;THREAD_NUM;++i){</span><br><span class="line">        tmp_result += result[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(GPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);</span><br><span class="line">    <span class="comment">// CPU calculate</span></span><br><span class="line">    tmp_result = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        tmp_result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(CPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);<span class="comment">/**/</span></span><br><span class="line">    return <span class="number">0</span> ;</span><br><span class="line">}</span><br><span class="line"><span class="comment">//__global__ means that this function run in GPU, there isn't any return value.</span></span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span> </span>{</span><br><span class="line">    <span class="comment">//const int size = DATA_SIZE / THREAD_NUM;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="keyword">int</span> tmp_sum = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = tid ; i &lt; DATA_SIZE; i+=THREAD_NUM) {</span><br><span class="line">        tmp_sum += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    sum[tid] = tmp_sum;</span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// ======== used to generate rand datas ========</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"generateData !"</span>);</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % <span class="number">10</span> ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">(<span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Device Name : %s.\n"</span>, prop.name);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalGlobalMem : %lu.\n"</span>, prop.totalGlobalMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sharedMemPerBlock : %lu.\n"</span>, prop.sharedMemPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"regsPerBlock : %d.\n"</span>, prop.regsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"warpSize : %d.\n"</span>, prop.warpSize);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"memPitch : %lu.\n"</span>, prop.memPitch);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsPerBlock : %d.\n"</span>, prop.maxThreadsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsDim[0 - 2] : %d %d %d.\n"</span>, prop.maxThreadsDim[<span class="number">0</span>], prop.maxThreadsDim[<span class="number">1</span>], prop.maxThreadsDim[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxGridSize[0 - 2] : %d %d %d.\n"</span>, prop.maxGridSize[<span class="number">0</span>], prop.maxGridSize[<span class="number">1</span>], prop.maxGridSize[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalConstMem : %lu.\n"</span>, prop.totalConstMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"major.minor : %d.%d.\n"</span>, prop.major, prop.minor);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"clockRate : %d.\n"</span>, prop.clockRate);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"textureAlignment : %lu.\n"</span>, prop.textureAlignment);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"deviceOverlap : %d.\n"</span>, prop.deviceOverlap);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"multiProcessorCount : %d.\n"</span>, prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="comment">//used to count the device numbers</span></span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the cuda device count</span></span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">0</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find the device &gt;= 1.X</span></span><br><span class="line">    <span class="keyword">bool</span> noDeviceSupport = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        <span class="keyword">if</span> (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            <span class="keyword">if</span> (prop.major &gt;= <span class="number">1</span>) {</span><br><span class="line">		noDeviceSupport = <span class="literal">false</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"****** Device No%d*********************************\n"</span>,i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if can't find the device</span></span><br><span class="line">    <span class="keyword">if</span> (noDeviceSupport == <span class="literal">true</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device supporting CUDA 1.x.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set cuda device</span></span><br><span class="line">    cudaSetDevice(<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"Device No%d is selected.\n"</span>,<span class="number">4</span> );</span><br><span class="line"></span><br><span class="line">    return <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="改进3：多block多thread"><a href="#改进3：多block多thread" class="headerlink" title="改进3：多block多thread"></a>改进3：多block多thread</h2><figure class="highlight c"><figcaption><span>squareSum5.cu</span><a href="/tech/gpu/cuda0/squareSum5.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/******************************************************************** </span><br><span class="line">##### File Name: squareSum5.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">include</span> <span class="meta-string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="comment">// ======== define area ========</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> DATA_SIZE 1048576 <span class="comment">// 1M</span></span></span><br><span class="line"><span class="comment">//8*128=1024 threads</span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> BLOCK_NUM 8 <span class="comment">// block num</span></span></span><br><span class="line"><span class="meta"># <span class="meta-keyword">define</span> THREAD_NUM 128 <span class="comment">// thread num per block</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ======== global area ========</span></span><br><span class="line"><span class="keyword">int</span> data[DATA_SIZE];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">( <span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span>; </span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span></span>;</span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">( <span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span> </span>{</span><br><span class="line">    <span class="comment">// init CUDA device</span></span><br><span class="line">    <span class="keyword">if</span> (!InitCUDA()) { return <span class="number">0</span> ; }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"CUDA initialized.\n"</span> );</span><br><span class="line">    <span class="comment">// generate rand datas </span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"test !\n"</span>);</span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    <span class="comment">// malloc space for datas in GPU</span></span><br><span class="line">    <span class="keyword">int</span> *gpuData;</span><br><span class="line">    <span class="keyword">int</span> *sum;</span><br><span class="line">    <span class="keyword">clock_t</span> *time;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc start !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc gpuData is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM*BLOCK_NUM);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMalloc sum is ok !\n"</span>);</span><br><span class="line">    cudaMalloc(( void **) &amp;time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>));</span><br><span class="line">    cudaMemcpy(gpuData, data, <span class="keyword">sizeof</span> ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"cudaMemcpy data to gpuData is ok !\n"</span>);</span><br><span class="line">    <span class="comment">// calculate the squares's sum</span></span><br><span class="line">    <span class="comment">//CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span></span><br><span class="line">    squaresSum&lt;&lt;&lt; BLOCK_NUM , THREAD_NUM , <span class="number">0</span> &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    <span class="comment">// copy the result from GPU to HOST</span></span><br><span class="line">    <span class="keyword">int</span> result[THREAD_NUM*BLOCK_NUM];</span><br><span class="line">    <span class="keyword">clock_t</span> time_used;</span><br><span class="line">    cudaMemcpy(result, sum, <span class="keyword">sizeof</span> ( int )*THREAD_NUM*BLOCK_NUM, cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, <span class="keyword">sizeof</span> (<span class="keyword">clock_t</span>), cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// free GPU spaces</span></span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    <span class="comment">// print result</span></span><br><span class="line">    <span class="keyword">int</span> tmp_result = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;THREAD_NUM*BLOCK_NUM;++i){</span><br><span class="line">        tmp_result += result[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(GPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);</span><br><span class="line">    <span class="comment">// CPU calculate</span></span><br><span class="line">    tmp_result = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        tmp_result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"(CPU) sum:%d time:%ld\n"</span> , tmp_result, time_used);<span class="comment">/**/</span></span><br><span class="line">    return <span class="number">0</span> ;</span><br><span class="line">}</span><br><span class="line"><span class="comment">//__global__ means that this function run in GPU, there isn't any return value.</span></span><br><span class="line">__<span class="function">global__ <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">squaresSum</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> *sum, clock_t *time)</span> </span>{</span><br><span class="line">    <span class="comment">//const int size = DATA_SIZE / THREAD_NUM;</span></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">int</span> bid = blockIdx.x;</span><br><span class="line">    <span class="keyword">int</span> tmp_sum = <span class="number">0</span> ;</span><br><span class="line">    <span class="keyword">clock_t</span> start = clock();</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = bid * THREAD_NUM + tid ; i &lt; DATA_SIZE; i+=THREAD_NUM*BLOCK_NUM) {</span><br><span class="line">        tmp_sum += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    sum[bid*THREAD_NUM+tid] = tmp_sum;</span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line"><span class="comment">// ======== used to generate rand datas ========</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">generateData</span><span class="params">( <span class="keyword">int</span> *data, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"generateData !"</span>);</span><br><span class="line">    <span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % <span class="number">10</span> ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">printDeviceProp</span><span class="params">(<span class="keyword">const</span> cudaDeviceProp &amp;prop)</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Device Name : %s.\n"</span>, prop.name);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalGlobalMem : %lu.\n"</span>, prop.totalGlobalMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"sharedMemPerBlock : %lu.\n"</span>, prop.sharedMemPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"regsPerBlock : %d.\n"</span>, prop.regsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"warpSize : %d.\n"</span>, prop.warpSize);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"memPitch : %lu.\n"</span>, prop.memPitch);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsPerBlock : %d.\n"</span>, prop.maxThreadsPerBlock);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxThreadsDim[0 - 2] : %d %d %d.\n"</span>, prop.maxThreadsDim[<span class="number">0</span>], prop.maxThreadsDim[<span class="number">1</span>], prop.maxThreadsDim[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"maxGridSize[0 - 2] : %d %d %d.\n"</span>, prop.maxGridSize[<span class="number">0</span>], prop.maxGridSize[<span class="number">1</span>], prop.maxGridSize[<span class="number">2</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"totalConstMem : %lu.\n"</span>, prop.totalConstMem);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"major.minor : %d.%d.\n"</span>, prop.major, prop.minor);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"clockRate : %d.\n"</span>, prop.clockRate);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"textureAlignment : %lu.\n"</span>, prop.textureAlignment);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"deviceOverlap : %d.\n"</span>, prop.deviceOverlap);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"multiProcessorCount : %d.\n"</span>, prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">InitCUDA</span><span class="params">()</span></span><br><span class="line"></span>{</span><br><span class="line">    <span class="comment">//used to count the device numbers</span></span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the cuda device count</span></span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    <span class="keyword">if</span> (count == <span class="number">0</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// find the device &gt;= 1.X</span></span><br><span class="line">    <span class="keyword">bool</span> noDeviceSupport = <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        <span class="keyword">if</span> (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            <span class="keyword">if</span> (prop.major &gt;= <span class="number">1</span>) {</span><br><span class="line">		noDeviceSupport = <span class="literal">false</span>;</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"****** Device No%d*********************************\n"</span>,i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		<span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// if can't find the device</span></span><br><span class="line">    <span class="keyword">if</span> (noDeviceSupport == <span class="literal">true</span>) {</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">"There is no device supporting CUDA 1.x.\n"</span>);</span><br><span class="line">        return <span class="literal">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set cuda device</span></span><br><span class="line">    cudaSetDevice(<span class="number">4</span>);</span><br><span class="line">    <span class="built_in">printf</span> ( <span class="string">"Device No%d is selected.\n"</span>,<span class="number">4</span> );</span><br><span class="line"></span><br><span class="line">    return <span class="literal">true</span>;</span><br><span class="line">}</span><br></pre></td></tr></table></figure>
+<h2 id="改进4：使用block的共享内存"><a href="#改进4：使用block的共享内存" class="headerlink" title="改进4：使用block的共享内存"></a>改进4：使用block的共享内存</h2><p>以在block上求和该block的所有thread，然后再CPU中求和（小步提升）。<br><figure class="highlight"><figcaption><span>squareSum6.cu</span><a href="/tech/gpu/cuda0/squareSum6.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br></pre></td><td class="code"><pre><span class="line">/******************************************************************** </span><br><span class="line">##### File Name: squareSum6.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span><br><span class="line"># include&lt;stdio.h&gt;</span><br><span class="line"># include &lt;stdlib.h&gt;</span><br><span class="line"># include &lt;cuda_runtime.h&gt;</span><br><span class="line">// ======== define area ========</span><br><span class="line"># define DATA_SIZE 1048576 // 1M</span><br><span class="line">//8*128=1024 threads</span><br><span class="line"># define BLOCK_NUM 8 // block num</span><br><span class="line"># define THREAD_NUM 128 // thread num per block</span><br><span class="line"></span><br><span class="line">// ======== global area ========</span><br><span class="line">int data[DATA_SIZE];</span><br><span class="line">void printDeviceProp( const cudaDeviceProp &amp;prop);</span><br><span class="line">bool InitCUDA(); </span><br><span class="line">void generateData( int *data, int size);</span><br><span class="line">__global__ static void squaresSum( int *data, int *sum, clock_t *time);</span><br><span class="line">int main( int argc, char const *argv[]) {</span><br><span class="line">    // init CUDA device</span><br><span class="line">    if (!InitCUDA()) { return 0 ; }</span><br><span class="line">    printf ( "CUDA initialized.\n" );</span><br><span class="line">    // generate rand datas </span><br><span class="line">    printf("test !\n");</span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    // malloc space for datas in GPU</span><br><span class="line">    int *gpuData;</span><br><span class="line">    int *sum;</span><br><span class="line">    clock_t *time;</span><br><span class="line">    printf("cudaMalloc start !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, sizeof ( int ) * DATA_SIZE);</span><br><span class="line">    printf("cudaMalloc gpuData is ok !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, sizeof ( int )*BLOCK_NUM);</span><br><span class="line">    printf("cudaMalloc sum is ok !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;time, sizeof (clock_t));</span><br><span class="line">    cudaMemcpy(gpuData, data, sizeof ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    printf("cudaMemcpy data to gpuData is ok !\n");</span><br><span class="line">    // calculate the squares's sum</span><br><span class="line">    //CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span><br><span class="line">    squaresSum&lt;&lt;&lt; BLOCK_NUM , THREAD_NUM , THREAD_NUM*sizeof(int) &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    // copy the result from GPU to HOST</span><br><span class="line">    int result[BLOCK_NUM];</span><br><span class="line">    clock_t time_used;</span><br><span class="line">    cudaMemcpy(result, sum, sizeof ( int )*BLOCK_NUM, cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, sizeof (clock_t), cudaMemcpyDeviceToHost);</span><br><span class="line">    // free GPU spaces</span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    // print result</span><br><span class="line">    int tmp_result = 0;</span><br><span class="line">    for(int i=0;i&lt;BLOCK_NUM;++i){</span><br><span class="line">        tmp_result += result[i];</span><br><span class="line">    }</span><br><span class="line">    printf ( "(GPU) sum:%d time:%ld\n" , tmp_result, time_used);</span><br><span class="line">    // CPU calculate</span><br><span class="line">    tmp_result = 0 ;</span><br><span class="line">    clock_t start = clock();</span><br><span class="line">    for ( int i = 0 ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        tmp_result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    printf ( "(CPU) sum:%d time:%ld\n" , tmp_result, time_used);/**/</span><br><span class="line">    return 0 ;</span><br><span class="line">}</span><br><span class="line">//__global__ means that this function run in GPU, there isn't any return value.</span><br><span class="line">__global__ static void squaresSum( int *data, int *sum, clock_t *time) {</span><br><span class="line">    // define of shared memory</span><br><span class="line">    __shared__ int shared[THREAD_NUM];</span><br><span class="line"></span><br><span class="line">    const int tid = threadIdx.x;</span><br><span class="line">    const int bid = blockIdx.x;</span><br><span class="line">    </span><br><span class="line">    shared[tid] = 0 ;</span><br><span class="line">    </span><br><span class="line">    clock_t start = clock();</span><br><span class="line"></span><br><span class="line">    for ( int i = bid * THREAD_NUM + tid ; i &lt; DATA_SIZE; i+=THREAD_NUM*BLOCK_NUM) {</span><br><span class="line">        shared[tid] += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    //同步操作，必须等到之前的线程都运行结束，才能继续后面的程序</span><br><span class="line">    __syncthreads();</span><br><span class="line">    //同步完成之后，将部分和加到share[0]上面</span><br><span class="line">    if(tid==0){ //这里保证全部都在一个线程内完成</span><br><span class="line">        for(int i=1;i&lt;THREAD_NUM;i++){</span><br><span class="line">            shared[0]+=shared[i];</span><br><span class="line">        }</span><br><span class="line">        sum[bid]=shared[0];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line">// ======== used to generate rand datas ========</span><br><span class="line">void generateData( int *data, int size) {</span><br><span class="line">    printf("generateData !");</span><br><span class="line">    for ( int i = 0 ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % 10 ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line">void printDeviceProp(const cudaDeviceProp &amp;prop)</span><br><span class="line">{</span><br><span class="line">    printf("Device Name : %s.\n", prop.name);</span><br><span class="line">    printf("totalGlobalMem : %lu.\n", prop.totalGlobalMem);</span><br><span class="line">    printf("sharedMemPerBlock : %lu.\n", prop.sharedMemPerBlock);</span><br><span class="line">    printf("regsPerBlock : %d.\n", prop.regsPerBlock);</span><br><span class="line">    printf("warpSize : %d.\n", prop.warpSize);</span><br><span class="line">    printf("memPitch : %lu.\n", prop.memPitch);</span><br><span class="line">    printf("maxThreadsPerBlock : %d.\n", prop.maxThreadsPerBlock);</span><br><span class="line">    printf("maxThreadsDim[0 - 2] : %d %d %d.\n", prop.maxThreadsDim[0], prop.maxThreadsDim[1], prop.maxThreadsDim[2]);</span><br><span class="line">    printf("maxGridSize[0 - 2] : %d %d %d.\n", prop.maxGridSize[0], prop.maxGridSize[1], prop.maxGridSize[2]);</span><br><span class="line">    printf("totalConstMem : %lu.\n", prop.totalConstMem);</span><br><span class="line">    printf("major.minor : %d.%d.\n", prop.major, prop.minor);</span><br><span class="line">    printf("clockRate : %d.\n", prop.clockRate);</span><br><span class="line">    printf("textureAlignment : %lu.\n", prop.textureAlignment);</span><br><span class="line">    printf("deviceOverlap : %d.\n", prop.deviceOverlap);</span><br><span class="line">    printf("multiProcessorCount : %d.\n", prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">bool InitCUDA()</span><br><span class="line">{</span><br><span class="line">    //used to count the device numbers</span><br><span class="line">    int count;</span><br><span class="line"></span><br><span class="line">    // get the cuda device count</span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    if (count == 0) {</span><br><span class="line">        fprintf(stderr, "There is no device.\n");</span><br><span class="line">        return false;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // find the device &gt;= 1.X</span><br><span class="line">    bool noDeviceSupport = true;</span><br><span class="line">    int i;</span><br><span class="line">    for (i = 0; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        if (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            if (prop.major &gt;= 1) {</span><br><span class="line">		noDeviceSupport = false;</span><br><span class="line">		printf("****** Device No%d*********************************\n",i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		printf("\n");</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // if can't find the device</span><br><span class="line">    if (noDeviceSupport == true) {</span><br><span class="line">        fprintf(stderr, "There is no device supporting CUDA 1.x.\n");</span><br><span class="line">        return false;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // set cuda device</span><br><span class="line">    cudaSetDevice(4);</span><br><span class="line">    printf ( "Device No%d is selected.\n",4 );</span><br><span class="line"></span><br><span class="line">    return true;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<h2 id="改进5：加法树"><a href="#改进5：加法树" class="headerlink" title="改进5：加法树"></a>改进5：加法树</h2><p>在block内部求和时可以采用加法树的方法，实现并行化（小步提升）。<br><figure class="highlight"><figcaption><span>squareSum7.cu</span><a href="/tech/gpu/cuda0/squareSum7.cu">Download code</a></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line">/******************************************************************** </span><br><span class="line">##### File Name: squareSum7.cu </span><br><span class="line">##### File Func: calculate the sum of inputs's square</span><br><span class="line">##### Author: HeZhichao </span><br><span class="line">##### E-mail: hzc199307@gmail.com </span><br><span class="line">##### Create Time: 2016-5-11 </span><br><span class="line">*********************************************************************/</span><br><span class="line"># include&lt;stdio.h&gt;</span><br><span class="line"># include &lt;stdlib.h&gt;</span><br><span class="line"># include &lt;cuda_runtime.h&gt;</span><br><span class="line">// ======== define area ========</span><br><span class="line"># define DATA_SIZE 1048576 // 1M</span><br><span class="line">//8*128=1024 threads</span><br><span class="line"># define BLOCK_NUM 8 // block num</span><br><span class="line"># define THREAD_NUM 128 // thread num per block</span><br><span class="line"></span><br><span class="line">// ======== global area ========</span><br><span class="line">int data[DATA_SIZE];</span><br><span class="line">void printDeviceProp( const cudaDeviceProp &amp;prop);</span><br><span class="line">bool InitCUDA(); </span><br><span class="line">void generateData( int *data, int size);</span><br><span class="line">__global__ static void squaresSum( int *data, int *sum, clock_t *time);</span><br><span class="line">int main( int argc, char const *argv[]) {</span><br><span class="line">    // init CUDA device</span><br><span class="line">    if (!InitCUDA()) { return 0 ; }</span><br><span class="line">    printf ( "CUDA initialized.\n" );</span><br><span class="line">    // generate rand datas </span><br><span class="line">    printf("test !\n");</span><br><span class="line">    generateData(data, DATA_SIZE);</span><br><span class="line">    // malloc space for datas in GPU</span><br><span class="line">    int *gpuData;</span><br><span class="line">    int *sum;</span><br><span class="line">    clock_t *time;</span><br><span class="line">    printf("cudaMalloc start !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;gpuData, sizeof ( int ) * DATA_SIZE);</span><br><span class="line">    printf("cudaMalloc gpuData is ok !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;sum, sizeof ( int )*BLOCK_NUM);</span><br><span class="line">    printf("cudaMalloc sum is ok !\n");</span><br><span class="line">    cudaMalloc(( void **) &amp;time, sizeof (clock_t));</span><br><span class="line">    cudaMemcpy(gpuData, data, sizeof ( int ) * DATA_SIZE, cudaMemcpyHostToDevice);</span><br><span class="line">    printf("cudaMemcpy data to gpuData is ok !\n");</span><br><span class="line">    // calculate the squares's sum</span><br><span class="line">    //CUDA调用在GPU中函数名称&lt;&lt;&lt;block num, thread num, shared memory size&gt;&gt;&gt;(param,...) ;</span><br><span class="line">    squaresSum&lt;&lt;&lt; BLOCK_NUM , THREAD_NUM , THREAD_NUM*sizeof(int) &gt;&gt;&gt;(gpuData, sum, time);</span><br><span class="line">    // copy the result from GPU to HOST</span><br><span class="line">    int result[BLOCK_NUM];</span><br><span class="line">    clock_t time_used;</span><br><span class="line">    cudaMemcpy(result, sum, sizeof ( int )*BLOCK_NUM, cudaMemcpyDeviceToHost);</span><br><span class="line">    cudaMemcpy(&amp;time_used, time, sizeof (clock_t), cudaMemcpyDeviceToHost);</span><br><span class="line">    // free GPU spaces</span><br><span class="line">    cudaFree(gpuData);</span><br><span class="line">    cudaFree(sum); cudaFree(time);</span><br><span class="line">    // print result</span><br><span class="line">    int tmp_result = 0;</span><br><span class="line">    for(int i=0;i&lt;BLOCK_NUM;++i){</span><br><span class="line">        tmp_result += result[i];</span><br><span class="line">    }</span><br><span class="line">    printf ( "(GPU) sum:%d time:%ld\n" , tmp_result, time_used);</span><br><span class="line">    // CPU calculate</span><br><span class="line">    tmp_result = 0 ;</span><br><span class="line">    clock_t start = clock();</span><br><span class="line">    for ( int i = 0 ; i &lt; DATA_SIZE; ++i) {</span><br><span class="line">        tmp_result += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    time_used = clock() - start;</span><br><span class="line">    printf ( "(CPU) sum:%d time:%ld\n" , tmp_result, time_used);/**/</span><br><span class="line">    return 0 ;</span><br><span class="line">}</span><br><span class="line">//__global__ means that this function run in GPU, there isn't any return value.</span><br><span class="line">__global__ static void squaresSum( int *data, int *sum, clock_t *time) {</span><br><span class="line">    // define of shared memory</span><br><span class="line">    __shared__ int shared[THREAD_NUM];</span><br><span class="line"></span><br><span class="line">    const int tid = threadIdx.x;</span><br><span class="line">    const int bid = blockIdx.x;</span><br><span class="line"></span><br><span class="line">    int offset = THREAD_NUM / 2;</span><br><span class="line">    </span><br><span class="line">    shared[tid] = 0 ;</span><br><span class="line">    </span><br><span class="line">    clock_t start = clock();</span><br><span class="line"></span><br><span class="line">    for ( int i = bid * THREAD_NUM + tid ; i &lt; DATA_SIZE; i+=THREAD_NUM*BLOCK_NUM) {</span><br><span class="line">        shared[tid] += data[i] * data[i];</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    //同步操作，必须等到之前的线程都运行结束，才能继续后面的程序</span><br><span class="line">    __syncthreads();</span><br><span class="line">    while ( offset&gt;0){</span><br><span class="line">        if(tid &lt; offset){//block的后半部分的thread的值加到前面一半</span><br><span class="line">            shared[tid] += shared[tid+offset];</span><br><span class="line">        }</span><br><span class="line">        offset &gt;&gt;=1 ;// 除以2</span><br><span class="line">        __syncthreads();//等到对半加法全部完成</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    //只在每个block的第一个thread做赋值操作</span><br><span class="line">    if(tid == 0) sum[bid] = shared[0];</span><br><span class="line"></span><br><span class="line">    *time = clock() - start;</span><br><span class="line">}</span><br><span class="line">// ======== used to generate rand datas ========</span><br><span class="line">void generateData( int *data, int size) {</span><br><span class="line">    printf("generateData !");</span><br><span class="line">    for ( int i = 0 ; i &lt; size; ++i) {</span><br><span class="line">        data[i] = rand() % 10 ;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line">void printDeviceProp(const cudaDeviceProp &amp;prop)</span><br><span class="line">{</span><br><span class="line">    printf("Device Name : %s.\n", prop.name);</span><br><span class="line">    printf("totalGlobalMem : %lu.\n", prop.totalGlobalMem);</span><br><span class="line">    printf("sharedMemPerBlock : %lu.\n", prop.sharedMemPerBlock);</span><br><span class="line">    printf("regsPerBlock : %d.\n", prop.regsPerBlock);</span><br><span class="line">    printf("warpSize : %d.\n", prop.warpSize);</span><br><span class="line">    printf("memPitch : %lu.\n", prop.memPitch);</span><br><span class="line">    printf("maxThreadsPerBlock : %d.\n", prop.maxThreadsPerBlock);</span><br><span class="line">    printf("maxThreadsDim[0 - 2] : %d %d %d.\n", prop.maxThreadsDim[0], prop.maxThreadsDim[1], prop.maxThreadsDim[2]);</span><br><span class="line">    printf("maxGridSize[0 - 2] : %d %d %d.\n", prop.maxGridSize[0], prop.maxGridSize[1], prop.maxGridSize[2]);</span><br><span class="line">    printf("totalConstMem : %lu.\n", prop.totalConstMem);</span><br><span class="line">    printf("major.minor : %d.%d.\n", prop.major, prop.minor);</span><br><span class="line">    printf("clockRate : %d.\n", prop.clockRate);</span><br><span class="line">    printf("textureAlignment : %lu.\n", prop.textureAlignment);</span><br><span class="line">    printf("deviceOverlap : %d.\n", prop.deviceOverlap);</span><br><span class="line">    printf("multiProcessorCount : %d.\n", prop.multiProcessorCount);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">bool InitCUDA()</span><br><span class="line">{</span><br><span class="line">    //used to count the device numbers</span><br><span class="line">    int count;</span><br><span class="line"></span><br><span class="line">    // get the cuda device count</span><br><span class="line">    cudaGetDeviceCount(&amp;count);</span><br><span class="line">    if (count == 0) {</span><br><span class="line">        fprintf(stderr, "There is no device.\n");</span><br><span class="line">        return false;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // find the device &gt;= 1.X</span><br><span class="line">    bool noDeviceSupport = true;</span><br><span class="line">    int i;</span><br><span class="line">    for (i = 0; i &lt; count; ++i) {</span><br><span class="line">        cudaDeviceProp prop;</span><br><span class="line">        if (cudaGetDeviceProperties(&amp;prop, i) == cudaSuccess) {</span><br><span class="line">            if (prop.major &gt;= 1) {</span><br><span class="line">		noDeviceSupport = false;</span><br><span class="line">		printf("****** Device No%d*********************************\n",i);</span><br><span class="line">		printDeviceProp(prop);</span><br><span class="line">		printf("\n");</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // if can't find the device</span><br><span class="line">    if (noDeviceSupport == true) {</span><br><span class="line">        fprintf(stderr, "There is no device supporting CUDA 1.x.\n");</span><br><span class="line">        return false;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    // set cuda device</span><br><span class="line">    cudaSetDevice(4);</span><br><span class="line">    printf ( "Device No%d is selected.\n",4 );</span><br><span class="line"></span><br><span class="line">    return true;</span><br><span class="line">}</span><br></pre></td></tr></table></figure></p>
+<p>　</p>
+<p>　</p>
+<hr>
+<p><strong>版权声明</strong></p>
+<p>本文首发于 <a href="hzc199307.github.io" title="贺智超的博客">贺智超的博客</a>（<a href="http://hezhichao.cn/" title="http://hezhichao.cn/">http://hezhichao.cn/</a> or <a href="http://hzc199307.github.io" title="http://hzc199307.github.io" target="_blank" rel="external">http://hzc199307.github.io</a>），转载请注明出处。</p>
+<p>本文链接：<a href="http://hezhichao.cn/tech/gpu/cuda0/">http://hezhichao.cn/tech/gpu/cuda0/</a><br>永久链接：<a href="http://hzc199307.github.io/tech/gpu/cuda0/" target="_blank" rel="external">http://hzc199307.github.io/tech/gpu/cuda0/</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>►<a class="article-category-link" href="/categories/Tech/GPU/">GPU</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GPU/">GPU</a><a href="/tags/CUDA/">CUDA</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://hezhichao.cn/tech/gpu/cuda0/" data-title="CUDA入门 | Forward" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/deeplearning/app/neural-art/"  title="基于DNN的艺术风格生成算法的应用">
+ <strong>下一篇：</strong><br/> 
+ <span>基于DNN的艺术风格生成算法的应用
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+<section id="comments" class="comment">
+	<div class="ds-thread" data-thread-key="tech/gpu/cuda0/" data-title="CUDA入门" data-url="http://hezhichao.cn/tech/gpu/cuda0/"></div>
+</section>
+
+
+
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#初识CUDA"><span class="toc-number">1.</span> <span class="toc-text">初识CUDA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#部分函数介绍"><span class="toc-number">1.1.</span> <span class="toc-text">部分函数介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cudaDeviceProp结构"><span class="toc-number">1.2.</span> <span class="toc-text">cudaDeviceProp结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译"><span class="toc-number">1.3.</span> <span class="toc-text">编译</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用GPU实现数组平方和"><span class="toc-number">2.</span> <span class="toc-text">使用GPU实现数组平方和</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#用GPU的简单实现"><span class="toc-number">2.1.</span> <span class="toc-text">用GPU的简单实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进1：多线程"><span class="toc-number">2.2.</span> <span class="toc-text">改进1：多线程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进2：使内存的整体读取连续"><span class="toc-number">2.3.</span> <span class="toc-text">改进2：使内存的整体读取连续</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进3：多block多thread"><span class="toc-number">2.4.</span> <span class="toc-text">改进3：多block多thread</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进4：使用block的共享内存"><span class="toc-number">2.5.</span> <span class="toc-text">改进4：使用block的共享内存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#改进5：加法树"><span class="toc-number">2.6.</span> <span class="toc-text">改进5：加法树</span></a></li></ol></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://blog.csdn.net/hzc199307" target="_blank" title="My CSDN Blog">My CSDN Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://ino.design/" target="_blank" title="Ino&#39;s Blog">Ino&#39;s Blog</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com/users/936b8a35c7ed/latest_articles" target="_blank" title="GentleH&#39;s Jianshu">GentleH&#39;s Jianshu</a>
+            
+          </li>
+        
+          <li>
+            
+            	<a href="http://huozi07.github.io/liuzihuaresume/" target="_blank" title="Liu Zihua&#39;s Blog">Liu Zihua&#39;s Blog</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+<div class="category-list" >
+	<p class="asidetitle" >分类</p>
+		<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/">ACM</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/ACM/SolutionReport/">SolutionReport</a><span class="category-list-count">2</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Research/">Research</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/">DeepLearning</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Research/DeepLearning/APP/">APP</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/">Tech</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/GPU/">GPU</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tech/Hexo/">Hexo</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/">Travel</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Travel/Singapore/">Singapore</a><span class="category-list-count">1</span></li></ul></li></ul> 
+</div>
+ 
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/ACM/" title="ACM">ACM<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Travel/" title="Travel">Travel<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/数学/" title="数学">数学<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GPU/" title="GPU">GPU<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/CUDA/" title="CUDA">CUDA<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/DeepLearning/" title="DeepLearning">DeepLearning<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/APP/" title="APP">APP<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/hdoj/" title="hdoj">hdoj<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/poj/" title="poj">poj<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/动态规划/" title="动态规划">动态规划<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/组合数学/" title="组合数学">组合数学<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Hexo/" title="Hexo">Hexo<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Singapore/" title="Singapore">Singapore<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Art/" title="Art">Art<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="popularlist">
+    <p class="asidetitle">
+        <!--<a href="javascript:;" onclick="switch_widget_hidden(this);">-->
+            Top2 热榜 &nbsp;
+            <!--<i class="fa fa-caret-up"></i>-->
+        <!--</a>-->
+    </p>
+    <ul id="popularlist_ul" class="clearfix">
+        
+            <li><a href="javascript:;">1 &nbsp;loading ...</a></li>
+        
+            <li><a href="javascript:;">2 &nbsp;loading ...</a></li>
+        
+    </ul>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">《孙正扬秘史》<sup>作者：GentleH™</class="asidetitle"></p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.jianshu.com/p/808173c88ceb" target="_blank" title="第一章 梦回当初">第一章 梦回当初</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  <div class="linkslist">
+  <p class="asidetitle">Visitors</p>
+    <a href="http://info.flagcounter.com/DMzh"><img src="http://s09.flagcounter.com/count2/DMzh/bg_FFFFFF/txt_000000/border_CCCCCC/columns_2/maxflags_10/viewers_++/labels_0/pageviews_1/flags_0/percent_0/" alt="Free counters!" border="0"></a>
+</div>
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m HeZhichao from SCUT. <br/>
+			This is my blog, believe it or not.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<a href="mailto:hzc199307@gmail.com" target="_blank" class="icon-email" title="Email Me"></a>
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2016 
+		
+		<a href="/about" target="_blank" title="HeZhichao">HeZhichao</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+<script type="text/javascript">
+  var duoshuoQuery = {short_name:"hzc199307"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+    || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+</script> 
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+<!-- Lean Cloud Begin -->
+<!-- Lean Cloud Begin -->
+<script src="https://leancloud.cn/scripts/lib/av-0.5.0.min.js"></script>
+<script type="text/javascript">
+
+    /* For the statistics of page views */
+    AV.initialize(
+        "hf8PxdTxBd4viu7KMI63xbgw-gzGzoHsz", // 应用 id
+        "VAj0e9mFIhD632UX67zCn3nu" // 应用 key
+    );
+
+    function addCount(Counter) {
+		//alert("addCount:");
+        url = $('.article-url').attr('href').trim();
+        title = $('.article-title').text().trim();
+		
+        var query = new AV.Query(Counter);
+		
+        query.equalTo("url",url); // use url as unique idnetfication
+        query.find({
+            success: function(results) {
+				//alert("results:"+results.length);
+                if (results.length>0) {
+                    var counter = results[0];
+                    counter.fetchWhenSave(true); //get recent result
+                    counter.increment("time");
+                    counter.save(null, {
+						success: function(counter) {
+							var content =  counter.get('time') + ' ' + $(document.getElementById(url)).text();
+							//$(document.getElementById(url)).text(content);
+						},
+						error: function(counter, error) {
+							//alert("error："+error);
+							//console.log('Failed to save Visitor num, with error message: ' + error.message);
+						}
+					});
+                } else {
+					//alert("else");
+                    var newcounter = new Counter();
+                    newcounter.set("title", title);
+                    newcounter.set("url", url);
+                    newcounter.set("time", 1);
+					// 新建一个 ACL 实例
+					var acl = new AV.ACL();
+					acl.setPublicReadAccess(true);
+					acl.setPublicWriteAccess(true);
+					// 将 ACL 实例赋予 newcounter 对象
+					newcounter.setACL(acl);
+                    newcounter.save(null, {
+                        success: function(newcounter) {
+                            //alert('New object created');
+                        },
+                        error: function(newcounter,error) {
+                            //alert('Failed to create');
+                        }
+                    });
+                }
+            },
+            error: function(error) { // find null is not a error
+                //alert('Error:' + error.code + " " + error.message);
+            }
+        });
+    }
+
+    $(function() {
+        var Counter = AV.Object.extend("Counter");
+        // Only increse visit counting when it's a post
+        // and it's not the local site.
+        if (1 == $('.article-title').length
+            //TODO && (-1 != location.href.indexOf("icehe.me"))
+        ) {
+            addCount(Counter);
+        }
+
+        // if popularlist widget exists, add item to it.
+        var popular_list = $('.popularlist');
+        if (1 == popular_list.length) {
+            var query = new AV.Query(Counter);
+            query.descending("time");
+            query.limit(20);
+            query.find({
+                success: function(results) {
+                    for(var i = 0; i < results.length; ++i) {
+                        var counter = results[i];
+                        title = counter.get("title");
+
+                        $('#popularlist_ul li:eq(' + i + ')').html('<a href="'
+                                + counter.get("url") + '" name="'
+                                + title + '">No.'
+								+ (i+1) + '&nbsp&nbsp'
+                                + '<sup>'
+                                + counter.get("time") + ' </sup> &nbsp;'
+                                + title
+                                + '</a>'
+                        );
+                    }
+                },
+                error: function(error) {
+                    //alert("Error:" + error.code + " " + error.message);
+                }
+            });
+        }
+
+        // if cur page is a post, set the post pageview.
+        var article_info = $(".article-info");
+		//alert("article_info.length = "+article_info.length);
+        if (1 == article_info.length) {
+            var query = new AV.Query(Counter);
+			//alert("title "+article_info.find(".article-title").length);
+            query.equalTo("url", article_info.find(".article-title a").attr("href"));
+            query.limit(1);
+            query.find({
+                success: function(results) {
+                    if (1 == results.length) {
+                        var counter = results[0];
+                        title = counter.get("title");
+                        url = counter.get("url");
+                        time = counter.get("time");
+                        article_info.find(".article-pageview").text(time);
+                    }
+                },
+                error: function(error) {
+                    article_info.find(".article-pageview").text("0");
+                    //alert("Error:" + error.code + " " + error.message);
+                }
+            });
+        }
+		/**
+		else if(1 < article_info.length){
+			var query = new AV.Query(Counter);
+			index = article_info.length-1;
+			updatepageview(article_info);
+		}**/
+
+        // if cur page is Home, set the post_list's pageviews.
+		//alert("post_list:"+post_list.length);
+        if (1 < article_info.length) {
+            var a_items = article_info.find(".article-title");
+			//alert("a_items:"+a_items.length);
+			var query = new AV.Query(Counter);
+            for (var i = 0; i < a_items.length; ++i) {
+                var url = a_items.eq(i).find("a").attr("href");
+				//alert("url:"+url);
+                query.equalTo("url", url);
+                query.limit(1);
+                query.find({
+                    success: function(results) {
+                        if (1 == results.length) {
+                            var counter = results[0];
+                            title = counter.get("title");
+                            url = counter.get("url");
+                            time = counter.get("time");
+							//alert("url:"+url);
+							//alert(".parent():"+a_items.find("a[href='"+url+"']").parent("h1").parent("header").length);
+							a_items.find("a[href='"+url+"']").parent("h1").parent("header").find('.article-pageview').text(time);
+                            //$(".post a[href='" + url + "']").find('.article-pageview').text(time);
+                        }
+                    },
+                    error: function(error) {
+						a_items.find("a[href='"+url+"']").parent("h1").parent("header").find('.article-pageview').text("0");
+                        //alert("Error:" + error.code + " " + error.message);
+                    }
+                });
+            }
+        }
+    });
+</script>
+<!-- Lean Cloud End -->
+<!-- Lean Cloud End -->
+  </body>
+</html>
