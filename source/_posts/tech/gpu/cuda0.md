@@ -67,7 +67,7 @@ nvcc -o first_cuda first_cuda.cu
 # 使用GPU实现数组平方和
 
 ## 用GPU的简单实现
-{% include_code lang:c squareSum2.cu %}
+{% include_code1 lang:c squareSum2.cu %}
 
 ## 改进1：多线程
 {% include_code lang:c squareSum3.cu %}
