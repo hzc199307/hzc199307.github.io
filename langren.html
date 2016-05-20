@@ -1,0 +1,152 @@
+<html>
+<head>
+<title>狼人游戏</title>
+<script type="text/javascript">
+  var rolesName=new Array();
+  var rolesCount=new Array();
+  var rolesNum = 0;//玩家总人数
+  var rolesType=0;//几种角色
+  var isFirst = true;
+  var roles ;
+  var index=0;
+  var isStart = false;
+  function GetRandomNum(Min,Max)
+  {   
+	var Range = Max - Min;   
+	var Rand = Math.random();   
+	return(Min + Math.floor(Rand * Range));   
+  }
+  function refresh()
+  {
+	rolesName=new Array();
+	rolesCount=new Array();
+	rolesType=0;
+	rolesNum = 0;
+	isFirst = true;
+	index=0;
+	isStart = false;
+  }
+  function disp_prompt()
+  {
+	//confrim("你确定要...?");
+    var name=prompt("请输入您的姓名","");
+    var sex=prompt("请输入您的性别","女");
+    if (name!=null && name != "")
+    {
+      if (sex=="男")
+      {
+        alert(name+"先生您好！\n\n今天天气不错，希望您玩的开心！");
+      }
+      else
+      {
+        alert(name+"女士您好！\n\n今天天气不错，希望您玩的开心！");
+      }
+    }
+  }
+  function addRole(){
+	if(isStart){
+		alert("游戏正在进行ing！");
+		return;
+	}
+	var role=eval(document.getElementById('role')).value;
+    var num=parseInt(eval(document.getElementById('num')).value); 
+	if(role=== undefined||num=== undefined||role==''||num==''||num==NaN){
+		alert("请正确填写");
+	}
+	else{
+		rolesName[rolesType] = role;
+		rolesCount[rolesType] = num;
+		rolesNum = rolesNum+num;
+		rolesType = rolesType+1;
+		alert("成功添加 "+num+" 个 "+role+" 角色");
+	}
+  }
+  function startGame(){
+	if(isStart){
+		alert("游戏正在进行ing！");
+		return;
+	}
+	if(isFirst){
+		roles = new Array();
+		//alert("rolesNum "+rolesNum);
+		for(var i=0;i<rolesNum;i++){
+			//alert("i "+i);
+			var rIndex;
+			do{
+				rIndex = GetRandomNum(0,rolesNum);
+				//alert("rIndex "+rIndex);
+				//alert("roles[rIndex] "+roles[rIndex]);
+			}while(!(roles[rIndex]=== undefined)&&roles[rIndex]!='');
+			for(var j=0;j<rolesType;j++){
+				if(rolesCount[j]>0){
+					roles[rIndex]=rolesName[j];
+					rolesCount[j] = rolesCount[j]-1;
+					//alert(" "+roles[rIndex]);
+					break;
+				}
+			}
+		}
+		isFirst = false;
+		index=0;
+	}
+	alert(rolesNum+"人游戏已经开始，请抽取角色");
+	isStart = true;
+  }
+  
+  function getOneRole(){
+	if(index>=rolesNum){
+		alert("角色已经发完！");
+	}
+	else{
+		alert((index+1)+"号玩家获得角色："+roles[index]);
+		index = index+1;
+	}
+  }
+  
+  function showRoleList(){
+	if(isStart){
+		if(index<rolesNum){
+			alert("别急,角色还在没有抽完！");
+		}
+		else{
+			var out = "";
+			for(var i=0;i<rolesNum;i++){
+				out += "第"+i+"号："+roles[i]+"\n";
+			}
+			alert(out);
+		}
+	}
+	else{
+		var out = "";
+		for(var j=0;j<rolesType;j++){
+			out += rolesName[j] + " : "+rolesCount[j]+"个\n";
+		}
+		alert(out);
+	}
+  }
+  
+</script>
+</head>
+<body>
+狼人游戏小小小助手
+<br/>
+<input type="button"  style="width:200px;height:60px" onClick="refresh()" value="刷新狼人游戏" />
+<br/>
+<br/>
+角色 <input type="text" style="width:200px;height:60px" value="" id="role"/>
+<br/>
+数量 <input type="number" style="width:200px;height:60px" name="points" min="1" max="10" value="1" id="num"/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="addRole()" value="添加狼人角色" />
+<br/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="startGame()" value="开始游戏" />
+<br/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="getOneRole()" value="抽取角色" />
+<br/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="showRoleList()" value="开关上帝视角" />
+
+</body>
+</html>
