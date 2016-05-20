@@ -1,11 +1,11 @@
 <html>
 <head>
-<title>ÀÇÈËÓÎÏ·</title>
+<title>ç‹¼äººæ¸¸æˆ</title>
 <script type="text/javascript">
   var rolesName=new Array();
   var rolesCount=new Array();
-  var rolesNum = 0;//Íæ¼Ò×ÜÈËÊı
-  var rolesType=0;//¼¸ÖÖ½ÇÉ«
+  var rolesNum = 0;//ç©å®¶æ€»äººæ•°
+  var rolesType=0;//å‡ ç§è§’è‰²
   var isFirst = true;
   var roles ;
   var index=0;
@@ -28,42 +28,42 @@
   }
   function disp_prompt()
   {
-	//confrim("ÄãÈ·¶¨Òª...?");
-    var name=prompt("ÇëÊäÈëÄúµÄĞÕÃû","");
-    var sex=prompt("ÇëÊäÈëÄúµÄĞÔ±ğ","Å®");
+	//confrim("ä½ ç¡®å®šè¦...?");
+    var name=prompt("è¯·è¾“å…¥æ‚¨çš„å§“å","");
+    var sex=prompt("è¯·è¾“å…¥æ‚¨çš„æ€§åˆ«","å¥³");
     if (name!=null && name != "")
     {
-      if (sex=="ÄĞ")
+      if (sex=="ç”·")
       {
-        alert(name+"ÏÈÉúÄúºÃ£¡\n\n½ñÌìÌìÆø²»´í£¬Ï£ÍûÄúÍæµÄ¿ªĞÄ£¡");
+        alert(name+"å…ˆç”Ÿæ‚¨å¥½ï¼\n\nä»Šå¤©å¤©æ°”ä¸é”™ï¼Œå¸Œæœ›æ‚¨ç©çš„å¼€å¿ƒï¼");
       }
       else
       {
-        alert(name+"Å®Ê¿ÄúºÃ£¡\n\n½ñÌìÌìÆø²»´í£¬Ï£ÍûÄúÍæµÄ¿ªĞÄ£¡");
+        alert(name+"å¥³å£«æ‚¨å¥½ï¼\n\nä»Šå¤©å¤©æ°”ä¸é”™ï¼Œå¸Œæœ›æ‚¨ç©çš„å¼€å¿ƒï¼");
       }
     }
   }
   function addRole(){
 	if(isStart){
-		alert("ÓÎÏ·ÕıÔÚ½øĞĞing£¡");
+		alert("æ¸¸æˆæ­£åœ¨è¿›è¡Œingï¼");
 		return;
 	}
 	var role=eval(document.getElementById('role')).value;
     var num=parseInt(eval(document.getElementById('num')).value); 
 	if(role=== undefined||num=== undefined||role==''||num==''||num==NaN){
-		alert("ÇëÕıÈ·ÌîĞ´");
+		alert("è¯·æ­£ç¡®å¡«å†™");
 	}
 	else{
 		rolesName[rolesType] = role;
 		rolesCount[rolesType] = num;
 		rolesNum = rolesNum+num;
 		rolesType = rolesType+1;
-		alert("³É¹¦Ìí¼Ó "+num+" ¸ö "+role+" ½ÇÉ«");
+		alert("æˆåŠŸæ·»åŠ  "+num+" ä¸ª "+role+" è§’è‰²");
 	}
   }
   function startGame(){
 	if(isStart){
-		alert("ÓÎÏ·ÕıÔÚ½øĞĞing£¡");
+		alert("æ¸¸æˆæ­£åœ¨è¿›è¡Œingï¼");
 		return;
 	}
 	if(isFirst){
@@ -89,16 +89,16 @@
 		isFirst = false;
 		index=0;
 	}
-	alert(rolesNum+"ÈËÓÎÏ·ÒÑ¾­¿ªÊ¼£¬Çë³éÈ¡½ÇÉ«");
+	alert(rolesNum+"äººæ¸¸æˆå·²ç»å¼€å§‹ï¼Œè¯·æŠ½å–è§’è‰²");
 	isStart = true;
   }
   
   function getOneRole(){
 	if(index>=rolesNum){
-		alert("½ÇÉ«ÒÑ¾­·¢Íê£¡");
+		alert("è§’è‰²å·²ç»å‘å®Œï¼");
 	}
 	else{
-		alert((index+1)+"ºÅÍæ¼Ò»ñµÃ½ÇÉ«£º"+roles[index]);
+		alert((index+1)+"å·ç©å®¶è·å¾—è§’è‰²ï¼š"+roles[index]);
 		index = index+1;
 	}
   }
@@ -106,12 +106,12 @@
   function showRoleList(){
 	if(isStart){
 		if(index<rolesNum){
-			alert("±ğ¼±,½ÇÉ«»¹ÔÚÃ»ÓĞ³éÍê£¡");
+			alert("åˆ«æ€¥,è§’è‰²è¿˜åœ¨æ²¡æœ‰æŠ½å®Œï¼");
 		}
 		else{
 			var out = "";
 			for(var i=0;i<rolesNum;i++){
-				out += "µÚ"+i+"ºÅ£º"+roles[i]+"\n";
+				out += "ç¬¬"+i+"å·ï¼š"+roles[i]+"\n";
 			}
 			alert(out);
 		}
@@ -119,7 +119,7 @@
 	else{
 		var out = "";
 		for(var j=0;j<rolesType;j++){
-			out += rolesName[j] + " : "+rolesCount[j]+"¸ö\n";
+			out += rolesName[j] + " : "+rolesCount[j]+"ä¸ª\n";
 		}
 		alert(out);
 	}
@@ -128,25 +128,25 @@
 </script>
 </head>
 <body>
-ÀÇÈËÓÎÏ·Ğ¡Ğ¡Ğ¡ÖúÊÖ
+ç‹¼äººæ¸¸æˆå°å°å°åŠ©æ‰‹
 <br/>
-<input type="button"  style="width:200px;height:60px" onClick="refresh()" value="Ë¢ĞÂÀÇÈËÓÎÏ·" />
-<br/>
-<br/>
-½ÇÉ« <input type="text" style="width:200px;height:60px" value="" id="role"/>
-<br/>
-ÊıÁ¿ <input type="number" style="width:200px;height:60px" name="points" min="1" max="10" value="1" id="num"/>
-<br/>
-<input type="button" style="width:200px;height:60px" onClick="addRole()" value="Ìí¼ÓÀÇÈË½ÇÉ«" />
+<input type="button"  style="width:200px;height:60px" onClick="refresh()" value="åˆ·æ–°ç‹¼äººæ¸¸æˆ" />
 <br/>
 <br/>
-<input type="button" style="width:200px;height:60px" onClick="startGame()" value="¿ªÊ¼ÓÎÏ·" />
+è§’è‰² <input type="text" style="width:200px;height:60px" value="" id="role"/>
+<br/>
+æ•°é‡ <input type="number" style="width:200px;height:60px" name="points" min="1" max="10" value="1" id="num"/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="addRole()" value="æ·»åŠ ç‹¼äººè§’è‰²" />
 <br/>
 <br/>
-<input type="button" style="width:200px;height:60px" onClick="getOneRole()" value="³éÈ¡½ÇÉ«" />
+<input type="button" style="width:200px;height:60px" onClick="startGame()" value="å¼€å§‹æ¸¸æˆ" />
 <br/>
 <br/>
-<input type="button" style="width:200px;height:60px" onClick="showRoleList()" value="¿ª¹ØÉÏµÛÊÓ½Ç" />
+<input type="button" style="width:200px;height:60px" onClick="getOneRole()" value="æŠ½å–è§’è‰²" />
+<br/>
+<br/>
+<input type="button" style="width:200px;height:60px" onClick="showRoleList()" value="å¼€å…³ä¸Šå¸è§†è§’" />
 
 </body>
 </html>
