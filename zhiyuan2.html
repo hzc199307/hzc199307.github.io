@@ -152,7 +152,7 @@
 		var pageSize = 10;
 		var type = 0;
 		var bktype = 1;
-		var schoolName = "";
+		var schoolName = "北京大学";
 		$("#weui_navbar a").click(function(){
 			type = $(this).index();
 			if(type == 0){
@@ -191,6 +191,7 @@
 			if(loading) return;
 			if(contentsAvaliable){
 				schoolName= $("#search_input").val();
+				schoolName = "北京大学";
 				$.showLoading("正在加载...");
 		        page++;
 		        loading = true;
