@@ -1,0 +1,197 @@
+
+<!-- saved from url=(0032)http://hezhichao.cn/langren.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>狼人游戏</title>
+<script type="text/javascript">
+  var rolesName=new Array();
+  var rolesCount=new Array();
+  var rolesCount_save =new Array();
+  var rolesNum = 0;//玩家总人数
+  var rolesType=0;//几种角色
+  var isFirst = true;
+  var roles ;
+  var index=0;
+  var isStart = false;
+  function deepCopy(o) {
+    if (o instanceof Array) {
+        var n = [];
+        for (var i = 0; i < o.length; ++i) {
+            n[i] = deepCopy(o[i]);
+        }
+        return n;
+
+    } else if (o instanceof Object) {
+        var n = {}
+        for (var i in o) {
+            n[i] = deepCopy(o[i]);
+        }
+        return n;
+    } else {
+        return o;
+    }
+  }
+  function GetRandomNum(Min,Max)
+  {   
+	var Range = Max - Min;   
+	var Rand = Math.random();   
+	return(Min + Math.floor(Rand * Range));   
+  }
+  function refresh()
+  {
+	if(confirm("确定要开新局并且角色配置吗？")){
+		rolesName=new Array();
+		rolesCount=new Array();
+		rolesType=0;
+		rolesNum = 0;
+		isFirst = true;
+		index=0;
+		isStart = false;
+		document.getElementById("role").style.display="visible";
+		document.getElementById("num").style.display="visible";
+		document.getElementById("addRole").style.display="visible";
+		document.getElementById("startGame").style.display="visible";
+		document.getElementById("getOneRole").style.display="visible";
+	}
+  }
+  function continue_config()
+  {
+	if(confirm("确定要开新局并且角色配置吗？")){
+		rolesCount= deepCopy(rolesCount_save);
+		isFirst = true;
+		index=0;
+		isStart = false;
+		document.getElementById("role").style.display="visible";
+		document.getElementById("num").style.display="visible";
+		document.getElementById("addRole").style.display="visible";
+		document.getElementById("startGame").style.display="visible";
+		document.getElementById("getOneRole").style.display="visible";
+	}
+  }
+  function addRole(){
+	if(isStart){
+		alert("游戏正在进行ing！");
+		return;
+	}
+	var role=eval(document.getElementById('role')).value;
+    var num=parseInt(eval(document.getElementById('num')).value); 
+	if(role=== undefined||num=== undefined||role==''||num==''||num==NaN){
+		alert("请正确填写");
+	}
+	else{
+		rolesName[rolesType] = role;
+		rolesCount[rolesType] = num;
+		rolesCount_save[rolesType] = num;
+		rolesNum = rolesNum+num;
+		rolesType = rolesType+1;
+		alert("成功添加 "+num+" 个 "+role+" 角色");
+	}
+  }
+  function startGame(){
+	if(isStart){
+		alert("游戏正在进行ing！");
+		return;
+	}
+	if(rolesNum<3){
+		alert("游戏角色不够，请继续添加");
+		return
+	}
+	if(!confirm("确定要开始游戏吗？")){
+		return
+	}
+	if(isFirst){
+		roles = new Array();
+		//alert("rolesNum "+rolesNum);
+		for(var i=0;i<rolesNum;i++){
+			//alert("i "+i);
+			var rIndex;
+			do{
+				rIndex = GetRandomNum(0,rolesNum);
+				//alert("rIndex "+rIndex);
+				//alert("roles[rIndex] "+roles[rIndex]);
+			}while(!(roles[rIndex]=== undefined)&&roles[rIndex]!='');
+			for(var j=0;j<rolesType;j++){
+				if(rolesCount[j]>0){
+					roles[rIndex]=rolesName[j];
+					rolesCount[j] = rolesCount[j]-1;
+					//alert(" "+roles[rIndex]);
+					break;
+				}
+			}
+		}
+		isFirst = false;
+		index=0;
+	}
+	document.getElementById("role").style.display="hidden";
+	document.getElementById("num").style.display="hidden";
+	document.getElementById("addRole").style.display="hidden";
+	document.getElementById("startGame").style.display="hidden";
+	alert(rolesNum+"人游戏已经开始，请抽取角色");
+	isStart = true;
+  }
+  
+  function getOneRole(){
+	if(!isStart){
+		alert("游戏尚未开始！");
+	}
+	else if(index>=rolesNum){
+		alert("角色已经发完！");
+		document.getElementById("getOneRole").style.display="hidden";
+	}
+	else{
+		if(!confirm("确定要抽取角色吗？")){
+			return
+		}
+		alert((index+1)+"号玩家获得角色："+roles[index]);
+		index = index+1;
+	}
+  }
+  
+  function showRoleList(){
+	if(isStart){
+		if(index<rolesNum){
+			alert("别急,角色还在没有抽完！");
+		}
+		else{
+			var out = "";
+			for(var i=0;i<rolesNum;i++){
+				out += "第"+(i+1)+"号："+roles[i]+"\n";
+			}
+			alert(out);
+		}
+	}
+	else{
+		var out = "";
+		for(var j=0;j<rolesType;j++){
+			out += rolesName[j] + " : "+rolesCount[j]+"个\n";
+		}
+		alert(out);
+	}
+  }
+  
+</script>
+<style type="text/css">html,body,div,p,a{margin: 0;padding: 0;}#iciba_words-tool{width: 264px;font-size: 13px;font-family: "Microsoft YaHei","微软雅黑","Arial","Helvetica","Tahoma","Arial","STXihei";font-weight: border;color:#ffffff;}.iciba_top{background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/top.png);width:264px;height:5px;}.iciba_fy{color:#ffffff;}.iciba_word{color:#4db0fe;padding-left:14px;font-wight:bolder;line-height:24px;font-size:13px;background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/bg_11.png);}.iciba_result{background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/bg_11.png);}.iciba_loading{background-color: #fff;height: 150px;width: 100%}.iciba_result ul{width: 244px;list-style: none;padding-left: 14px;padding-right: 10px;padding-bottom:23px;}.iciba_result ul li{overflow: hidden;list-style: none;width: 244px;padding-top:14px;}.iciba_result li p.iciba_lf{float: left;width: 35px;}.iciba_result li p.iciba_rg{float: left;width: 209px;line-height:20px;}.iciba_link{width: 264px;height: 44px;}.iciba_link_a{width:264px;height:44px;display: inline-block;background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/mini_12normal.png);}.iciba_link_a:hover{width:264px;height:44px;display: inline-block;background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/mini_12hover.png);}.iciba_link_a:active{width:264px;height:44px;display: inline-block;background: url(chrome-extension://fmnnibbnalhhlifnljdjpcmhindijbii/images/mini_12pressed.png);}</style></head>
+<body>
+狼人游戏小小小助手
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="refresh" onclick="refresh()" value="开新局-更新角色配置">
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="continue_config" onclick="continue_config()" value="开新局-沿用角色配置">
+<br>
+角色 <input type="text" style="width:100%;height:150px;font-size:80px" value="" id="role">
+<br>
+数量 <input type="number" style="width:100%;height:150px;font-size:80px" name="points" min="1" max="10" value="1" id="num">
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="addRole" onclick="addRole()" value="添加狼人角色">
+<br>
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="startGame" onclick="startGame()" value="开始游戏">
+<br>
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="getOneRole" onclick="getOneRole()" value="抽取角色">
+<br>
+<br>
+<input type="button" style="width:100%;height:150px;font-size:80px" id="showRoleList" onclick="showRoleList()" value="开关上帝视角">
+
+
+
+<div id="cntvlive2-is-installed"></div></body><div></div></html>
