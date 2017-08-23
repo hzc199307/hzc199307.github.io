@@ -1,0 +1,42 @@
+<html>
+
+	<head>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	    <!-- <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> -->
+	    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>        
+	    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/maphilight/1.3.1/jquery.maphilight.js"></script>
+
+	    <script type="text/javascript">
+	    $(function() {
+	        $('#map_img').maphilight();
+	    });
+	    </script>
+
+		<style>
+		img 
+		{
+		  width: 300px;
+		  height: 300px;
+		}
+		</style>
+	</head>
+
+	<body>
+		<h1>World Map</h1>
+
+		<div class="map">
+		  <img id="map_img" usemap="#map_areas" src="http://kids.nationalgeographic.com/content/dam/kids/menu-items/newnav/secondary/GAMES_new.svg" />
+
+		  <map name="map_areas">
+
+		    <area shape="rect" coords="0,0,100,100" title="Default behavior" href="#" alt="Link">
+
+		    <area shape="rect" coords="100,100,200,200" data-maphilight='{"strokeColor":"0000ff","strokeWidth":5,"fillColor":"ff0000","fillOpacity":0.6}' title="Metadata'd up a bit" href="#" alt="Link">
+
+			<area shape="rect" coords="200,200,250,300" title="3rd Area" href="#" alt="Link">
+		  </map>  
+
+
+		</div>
+	</body>
+</html>
