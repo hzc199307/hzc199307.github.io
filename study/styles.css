@@ -1,0 +1,488 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 导航按钮样式 */
+.nav-btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: none;
+    background-color: transparent;
+    color: #4B5563;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+}
+
+.nav-btn.active {
+    background-color: #4F46E5;
+    color: white;
+}
+
+/* 内容区域切换 */
+.section-content {
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.section-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 概念按钮样式 */
+.concept-btn {
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid #E5E7EB;
+    background-color: white;
+    color: #374151;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.concept-btn:hover {
+    border-color: #4F46E5;
+    background-color: #EEF2FF;
+    color: #4F46E5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.concept-btn.active {
+    border-color: #4F46E5;
+    background-color: #4F46E5;
+    color: white;
+}
+
+/* 题目类型按钮 */
+.problem-type-btn {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 2px solid #D1FAE5;
+    background-color: white;
+    color: #065F46;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+.problem-type-btn:hover {
+    background-color: #D1FAE5;
+    transform: translateX(5px);
+}
+
+.problem-type-btn.active {
+    background-color: #10B981;
+    color: white;
+    border-color: #10B981;
+}
+
+/* 数学公式样式 */
+.math-formula {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #4F46E5;
+    background-color: #EEF2FF;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: inline-block;
+    margin: 0.5rem 0;
+}
+
+/* 解题步骤样式 */
+.solution-step {
+    background-color: white;
+    border-left: 4px solid #4F46E5;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.solution-step-number {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    background-color: #4F46E5;
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 2rem;
+    font-weight: bold;
+    margin-right: 0.75rem;
+}
+
+.solution-step-content {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 3rem);
+}
+
+/* 提示框样式 */
+.hint-box {
+    background-color: #FEF3C7;
+    border: 2px solid #F59E0B;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* 正确答案样式 */
+.correct-answer {
+    background-color: #D1FAE5;
+    border: 2px solid #10B981;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* 错误提示样式 */
+.error-feedback {
+    background-color: #FEE2E2;
+    border: 2px solid #EF4444;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* 图表容器 */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 1rem 0;
+}
+
+/* 练习题卡片 */
+.practice-card {
+    background-color: white;
+    border: 2px solid #E5E7EB;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.practice-card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* 答案选项样式 */
+.answer-option {
+    padding: 1rem;
+    border: 2px solid #E5E7EB;
+    border-radius: 0.75rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.answer-option:hover {
+    background-color: #F3F4F6;
+    border-color: #4F46E5;
+}
+
+.answer-option.selected {
+    background-color: #EEF2FF;
+    border-color: #4F46E5;
+}
+
+.answer-option.correct {
+    background-color: #D1FAE5;
+    border-color: #10B981;
+}
+
+.answer-option.incorrect {
+    background-color: #FEE2E2;
+    border-color: #EF4444;
+}
+
+/* 进度条样式 */
+.progress-bar {
+    width: 100%;
+    height: 1.5rem;
+    background-color: #E5E7EB;
+    border-radius: 9999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #4F46E5, #7C3AED);
+    transition: width 0.5s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* 鼓励提示动画 */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.show-toast {
+    display: block !important;
+    animation: slideInRight 0.5s ease;
+}
+
+.hide-toast {
+    animation: slideOutRight 0.5s ease;
+}
+
+/* 坐标系画布 */
+.coordinate-canvas {
+    border: 2px solid #E5E7EB;
+    border-radius: 0.5rem;
+    background-color: white;
+    margin: 1rem 0;
+}
+
+/* 表格样式 */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+
+.data-table th {
+    background-color: #4F46E5;
+    color: white;
+    padding: 0.75rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.data-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.data-table tr:hover {
+    background-color: #F9FAFB;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .nav-btn {
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+    }
+
+    .section-content {
+        padding: 1rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* 加载动画 */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(79, 70, 229, 0.3);
+    border-radius: 50%;
+    border-top-color: #4F46E5;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 知识点标签 */
+.knowledge-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: #EEF2FF;
+    color: #4F46E5;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin: 0.25rem;
+}
+
+/* 难度标签 */
+.difficulty-easy {
+    color: #10B981;
+    font-weight: 600;
+}
+
+.difficulty-medium {
+    color: #F59E0B;
+    font-weight: 600;
+}
+
+.difficulty-hard {
+    color: #EF4444;
+    font-weight: 600;
+}
+
+/* 图像容器 */
+.image-container {
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 代码块样式 */
+.code-block {
+    background-color: #1F2937;
+    color: #F9FAFB;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-family: 'Courier New', monospace;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+/* 高亮文本 */
+.highlight {
+    background-color: #FEF3C7;
+    padding: 0.125rem 0.25rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+/* 按钮禁用状态 */
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 输入框焦点样式 */
+input:focus, textarea:focus {
+    outline: none;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #F3F4F6;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #9CA3AF;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #6B7280;
+}
+
+/* 交通计算器样式 */
+#calculator input[type="number"] {
+    transition: all 0.3s ease;
+}
+
+#calculator input[type="number"]:focus {
+    transform: scale(1.02);
+}
+
+#calculator-results {
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 表格高亮效果 */
+.data-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.data-table tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 场景按钮样式 */
+#calculator button[onclick^="loadScenario"] {
+    transition: all 0.3s ease;
+}
+
+#calculator button[onclick^="loadScenario"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 计算按钮脉冲动画 */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+button[onclick="calculateTransport()"]:hover {
+    animation: pulse 1s infinite;
+}
