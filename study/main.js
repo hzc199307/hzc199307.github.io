@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initConceptSection();
     initSolveSection();
     initPracticeSection();
-    initProgressSection();
     showEncouragement('欢迎来到一次函数学习助手！让我们一起开始学习之旅吧！🎉');
 });
 
@@ -67,11 +66,6 @@ window.navigateTo = function(section) {
     document.getElementById(section).classList.add('active');
 
     appState.currentSection = section;
-
-    // 如果切换到进度页面，更新图表
-    if (section === 'progress') {
-        updateProgressCharts();
-    }
 };
 
 // 概念讲解模块初始化
@@ -95,10 +89,6 @@ function loadConceptContent(concept) {
     const explainer = new ConceptExplainer();
     const content = explainer.getExplanation(concept);
     contentDiv.innerHTML = content;
-    
-    // 更新进度
-    appState.userProgress.conceptsLearned++;
-    updateProgressDisplay();
 }
 
 window.generateCustomExplanation = function() {
@@ -174,10 +164,6 @@ window.checkAnswer = function() {
     
     contentDiv.innerHTML = feedback;
     solutionDiv.classList.remove('hidden');
-
-    // 更新进度
-    appState.userProgress.problemsSolved++;
-    updateProgressDisplay();
 
     if (feedback.includes('correct-answer')) {
         showEncouragement('太棒了！你答对了！继续保持！🎉');
@@ -349,12 +335,9 @@ window.submitPracticeAnswer = function() {
 
     if (result.correct) {
         showEncouragement('答对了！你真棒！🎉');
-        appState.userProgress.problemsSolved++;
     } else {
         showEncouragement('再想想，你一定能做对的！💪');
     }
-
-    updateProgressDisplay();
 };
 
 window.previousQuestion = function() {
@@ -380,28 +363,6 @@ function getDifficultyText(difficulty) {
     return map[difficulty] || '中等';
 }
 
-// 进度追踪模块初始化
-function initProgressSection() {
-    updateProgressDisplay();
-}
-
-function updateProgressDisplay() {
-    document.getElementById('concepts-learned').textContent = appState.userProgress.conceptsLearned;
-    document.getElementById('problems-solved').textContent = appState.userProgress.problemsSolved;
-    document.getElementById('study-time').textContent = appState.userProgress.studyTime;
-    document.getElementById('accuracy-rate').textContent = appState.userProgress.accuracyRate + '%';
-}
-
-function updateProgressCharts() {
-    const chartManager = new ChartManager();
-    
-    // 知识点掌握情况雷达图
-    chartManager.createKnowledgeChart('knowledge-chart', appState.userProgress.knowledgePoints);
-    
-    // 每日练习统计柱状图
-    chartManager.createDailyChart('daily-chart', appState.userProgress.dailyPractice);
-}
-
 // 鼓励提示功能
 function showEncouragement(message) {
     const toast = document.getElementById('encouragement-toast');
@@ -424,59 +385,37 @@ function showEncouragement(message) {
 // 导出全局函数供HTML使用
 window.showEncouragement = showEncouragement;
 
-// 学习时间追踪
-let studyStartTime = Date.now();
-setInterval(() => {
-    const elapsed = Math.floor((Date.now() - studyStartTime) / 60000);
-    appState.userProgress.studyTime = 45 + elapsed;
-    if (document.getElementById('study-time')) {
-        document.getElementById('study-time').textContent = appState.userProgress.studyTime;
-    }
-}, 60000);
-
 // 交通计算器功能
 let transportCalculator = new TransportCalculator();
 
-// 更新公式显示
-function updateFormulas() {
-    const planABase = parseFloat(document.getElementById('planA-base').value);
-    const planARate = parseFloat(document.getElementById('planA-rate').value);
-    const planBBase = parseFloat(document.getElementById('planB-base').value);
-    const planBRate = parseFloat(document.getElementById('planB-rate').value);
-
-    transportCalculator.updatePlan('A', planABase, planARate);
-    transportCalculator.updatePlan('B', planBBase, planBRate);
-
-    document.getElementById('planA-formula').textContent = transportCalculator.getFormula('A');
-    document.getElementById('planB-formula').textContent = transportCalculator.getFormula('B');
-}
-
-// 监听输入变化
-document.addEventListener('DOMContentLoaded', () => {
-    const inputs = ['planA-base', 'planA-rate', 'planB-base', 'planB-rate'];
-    inputs.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.addEventListener('input', updateFormulas);
-        }
-    });
-});
-
 // 计算并显示结果
 window.calculateTransport = function() {
-    updateFormulas();
+    // 获取选中的交通方案
+    const selectedPlans = [];
+    const checkboxes = document.querySelectorAll('input[name="transport-plan"]:checked');
+    checkboxes.forEach(cb => {
+        selectedPlans.push(cb.value);
+    });
+
+    if (selectedPlans.length === 0) {
+        showEncouragement('请至少选择一种交通方式进行对比！😊');
+        return;
+    }
+
+    // 更新计算器的选择方案
+    transportCalculator.updateSelectedPlans(selectedPlans);
 
     // 显示结果区域
     document.getElementById('calculator-results').classList.remove('hidden');
 
+    // 生成计费规则说明
+    document.getElementById('pricing-rules').innerHTML = transportCalculator.generatePricingRulesHTML();
+
     // 生成图表
     transportCalculator.createComparisonChart('transport-chart');
 
-    // 生成交点分析
-    document.getElementById('intersection-analysis').innerHTML = transportCalculator.generateIntersectionAnalysis();
-
-    // 生成对比表格
-    document.getElementById('comparison-table-body').innerHTML = transportCalculator.generateComparisonTable();
+    // 生成详细分析
+    document.getElementById('detailed-analysis').innerHTML = transportCalculator.generateDetailedAnalysis();
 
     // 生成决策建议
     document.getElementById('decision-advice').innerHTML = transportCalculator.generateDecisionAdvice();
@@ -484,34 +423,5 @@ window.calculateTransport = function() {
     // 滚动到结果区域
     document.getElementById('calculator-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    showEncouragement('太棒了！你已经学会用一次函数分析实际问题了！🎉');
-};
-
-// 加载预设场景
-window.loadScenario = function(scenario) {
-    const scenarios = {
-        'taxi-bus': {
-            planA: { base: 10, rate: 2.4, name: '出租车' },
-            planB: { base: 2, rate: 0.5, name: '公交车' }
-        },
-        'taxi-subway': {
-            planA: { base: 10, rate: 2.4, name: '出租车' },
-            planB: { base: 3, rate: 0.4, name: '地铁' }
-        },
-        'bike-bus': {
-            planA: { base: 1.5, rate: 0.5, name: '共享单车' },
-            planB: { base: 2, rate: 0.3, name: '公交车' }
-        }
-    };
-
-    const selected = scenarios[scenario];
-    if (selected) {
-        document.getElementById('planA-base').value = selected.planA.base;
-        document.getElementById('planA-rate').value = selected.planA.rate;
-        document.getElementById('planB-base').value = selected.planB.base;
-        document.getElementById('planB-rate').value = selected.planB.rate;
-
-        updateFormulas();
-        showEncouragement(`已加载场景：${selected.planA.name} vs ${selected.planB.name}！点击计算按钮查看分析结果！`);
-    }
+    showEncouragement('太棒了！你已经学会用分段函数分析实际问题了！🎉');
 };
