@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026湖南高考志愿分析报告 | 608分 物理类 第14759名</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f3;
+    color: #2C2C2A;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  .container { max-width: 820px; margin: 0 auto; padding: 32px 20px 60px; }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 0.5px solid #D3D1C7;
+  }
+  .header h1 { font-size: 22px; font-weight: 600; margin-bottom: 8px; }
+  .header .subtitle { font-size: 14px; color: #888780; }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .metric {
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .metric .label { font-size: 12px; margin-bottom: 4px; }
+  .metric .value { font-size: 26px; font-weight: 600; }
+  .metric .unit { font-size: 13px; font-weight: 400; margin-left: 2px; }
+  .m-blue { background: #E6F1FB; } .m-blue .label { color: #0C447C; } .m-blue .value { color: #042C53; }
+  .m-purple { background: #EEEDFE; } .m-purple .label { color: #3C3489; } .m-purple .value { color: #26215C; }
+  .m-green { background: #E1F5EE; } .m-green .label { color: #085041; } .m-green .value { color: #04342C; }
+  .m-amber { background: #FAEEDA; } .m-amber .label { color: #633806; } .m-amber .value { color: #412402; }
+
+  .section { margin-bottom: 28px; }
+  .section h2 {
+    font-size: 16px; font-weight: 600; margin-bottom: 14px;
+    padding-left: 10px; border-left: 3px solid #378ADD;
+  }
+
+  .score-bar {
+    display: flex; align-items: flex-end; height: 120px;
+    gap: 2px; margin: 16px 0 8px;
+  }
+  .score-bar .bar {
+    flex: 1; border-radius: 6px 6px 0 0; position: relative;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding-top: 8px;
+  }
+  .score-bar .bar .score-label {
+    font-size: 11px; font-weight: 600; color: #fff;
+  }
+  .score-bar .bar .name-label {
+    position: absolute; bottom: -20px; font-size: 11px;
+    color: #888780; white-space: nowrap;
+  }
+
+  .info-box {
+    background: #fff; border: 0.5px solid #D3D1C7;
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 12px;
+  }
+  .info-box p { font-size: 13px; color: #5F5E5A; margin-bottom: 6px; }
+  .info-box p:last-child { margin-bottom: 0; }
+  .info-box .highlight { font-weight: 600; color: #2C2C2A; }
+
+  .conversion {
+    display: flex; gap: 8px; align-items: stretch;
+  }
+  .conv-card {
+    flex: 1; border: 0.5px solid #D3D1C7; border-radius: 10px;
+    padding: 14px; text-align: center;
+  }
+  .conv-card .year { font-size: 12px; color: #888780; margin-bottom: 4px; }
+  .conv-card .score { font-size: 18px; font-weight: 600; }
+  .conv-arrow { display: flex; align-items: center; color: #888780; font-size: 20px; }
+
+  .tier {
+    border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+    border: 0.5px solid #D3D1C7;
+  }
+  .tier-header {
+    padding: 12px 16px; display: flex; align-items: center; justify-content: space-between;
+  }
+  .tier-header .tier-name { font-size: 15px; font-weight: 600; }
+  .tier-header .tier-desc { font-size: 12px; }
+  .tier-rush { background: #FAECE7; }
+  .tier-rush .tier-name { color: #712B13; }
+  .tier-rush .tier-desc { color: #D85A30; }
+  .tier-stable { background: #E1F5EE; }
+  .tier-stable .tier-name { color: #085041; }
+  .tier-stable .tier-desc { color: #0F6E56; }
+  .tier-safe { background: #E6F1FB; }
+  .tier-safe .tier-name { color: #0C447C; }
+  .tier-safe .tier-desc { color: #185FA5; }
+
+  .uni-table { width: 100%; border-collapse: collapse; background: #fff; }
+  .uni-table th {
+    font-size: 12px; font-weight: 500; color: #888780;
+    text-align: left; padding: 8px 12px;
+    border-bottom: 0.5px solid #D3D1C7;
+  }
+  .uni-table td {
+    font-size: 13px; padding: 8px 12px;
+    border-bottom: 0.5px solid #F1EFE8;
+  }
+  .uni-table tr:last-child td { border-bottom: none; }
+  .uni-table .uni-name { font-weight: 500; color: #2C2C2A; }
+  .uni-table .tag {
+    display: inline-block; font-size: 10px; padding: 1px 6px;
+    border-radius: 4px; margin-left: 4px; font-weight: 500;
+  }
+  .tag-985 { background: #FAEEDA; color: #854F0B; }
+  .tag-211 { background: #EEEDFE; color: #3C3489; }
+  .tag-double { background: #E1F5EE; color: #085041; }
+
+  .tips {
+    background: #fff; border-radius: 12px; padding: 20px;
+    border: 0.5px solid #D3D1C7;
+  }
+  .tips ul { list-style: none; }
+  .tips li {
+    padding: 8px 0 8px 24px; position: relative;
+    font-size: 13px; color: #5F5E5A;
+    border-bottom: 0.5px solid #F1EFE8;
+  }
+  .tips li:last-child { border-bottom: none; }
+  .tips li::before {
+    content: ''; position: absolute; left: 6px; top: 15px;
+    width: 6px; height: 6px; border-radius: 50%; background: #378ADD;
+  }
+  .tips li strong { color: #2C2C2A; }
+
+  .disclaimer {
+    text-align: center; font-size: 12px; color: #B4B2A9;
+    margin-top: 32px; padding-top: 16px;
+    border-top: 0.5px solid #D3D1C7;
+  }
+
+  .position-badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+  }
+  .pos-high { background: #FAECE7; color: #993C1D; }
+  .pos-mid { background: #E1F5EE; color: #0F6E56; }
+  .pos-low { background: #E6F1FB; color: #185FA5; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>2026湖南高考志愿填报分析报告</h1>
+    <p class="subtitle">物理类 608分 · 全省第14,759名 · 生成于2026年6月25日</p>
+  </div>
+
+  <div class="metrics">
+    <div class="metric m-blue">
+      <div class="label">高考分数</div>
+      <div class="value">608<span class="unit">分</span></div>
+    </div>
+    <div class="metric m-purple">
+      <div class="label">全省位次</div>
+      <div class="value">14,759<span class="unit">名</span></div>
+    </div>
+    <div class="metric m-green">
+      <div class="label">超本科线</div>
+      <div class="value">+208<span class="unit">分</span></div>
+    </div>
+    <div class="metric m-amber">
+      <div class="label">超特招线</div>
+      <div class="value">+127<span class="unit">分</span></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>一、整体定位分析</h2>
+    <div class="info-box">
+      <p>2026年湖南物理类<span class="highlight">本科线400分</span>，<span class="highlight">特殊类型招生控制线481分</span>（相当于原一本线）。</p>
+      <p>你的608分超出特招线<span class="highlight">127分</span>，在全省30万物理类考生中排名前<span class="highlight">4.9%</span>，属于中上水平。</p>
+      <p>今年物理类600分以上共18,876人，你排在其中偏后位置，竞争力主要集中在<span class="highlight">中下游985和上游211院校</span>。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>二、位次跨年换算</h2>
+    <p style="font-size: 13px; color: #5F5E5A; margin-bottom: 12px;">2026年物理类平均分较2025年有所上升，同位次对应的分数"贬值"约5-6分。以下是用位次法换算的等效分数：</p>
+    <div class="conversion">
+      <div class="conv-card" style="border-color: #D85A30;">
+        <div class="year">2026年（今年）</div>
+        <div class="score" style="color: #D85A30;">608分 / 14,759名</div>
+      </div>
+      <div class="conv-arrow">→</div>
+      <div class="conv-card" style="border-color: #0F6E56;">
+        <div class="year">2025年等效</div>
+        <div class="score" style="color: #0F6E56;">约602-603分</div>
+      </div>
+      <div class="conv-arrow">→</div>
+      <div class="conv-card" style="border-color: #534AB7;">
+        <div class="year">2024年等效</div>
+        <div class="score" style="color: #534AB7;">约598-599分</div>
+      </div>
+    </div>
+    <div class="info-box" style="margin-top: 12px;">
+      <p>核心原则：<span class="highlight">位次比分数更稳定</span>。选校时应以排名14,759作为基准，对照近三年各校在湖南的录取位次，而非直接比分数。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>三、院校推荐（冲稳保策略）</h2>
+    <p style="font-size: 13px; color: #5F5E5A; margin-bottom: 14px;">以下推荐基于2024-2025年各校在湖南物理类的实际录取位次，等效换算至2026年。实际填报请以2026年招生计划为准。</p>
+
+    <div class="tier">
+      <div class="tier-header tier-rush">
+        <span class="tier-name">冲一冲</span>
+        <span class="tier-desc">等效位次 10,000-14,000 | 录取概率约30-40%</span>
+      </div>
+      <table class="uni-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">院校名称</th>
+            <th>类型</th>
+            <th>2025录取分</th>
+            <th>2025位次</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="uni-name">西安电子科技大学<span class="tag tag-211">211</span></td><td>理工</td><td>606</td><td>13,439</td><td>电子信息强校</td></tr>
+          <tr><td class="uni-name">中央财经大学<span class="tag tag-211">211</span></td><td>财经</td><td>606</td><td>13,439</td><td>财经类顶尖</td></tr>
+          <tr><td class="uni-name">北京外国语大学<span class="tag tag-211">211</span></td><td>语言</td><td>606</td><td>13,439</td><td>外语类顶尖</td></tr>
+          <tr><td class="uni-name">哈尔滨工程大学<span class="tag tag-211">211</span></td><td>理工</td><td>607</td><td>13,036</td><td>船舶/国防特色</td></tr>
+          <tr><td class="uni-name">中国农业大学<span class="tag tag-985">985</span></td><td>农林</td><td>607</td><td>13,036</td><td>部分专业组可冲</td></tr>
+          <tr><td class="uni-name">北京化工大学<span class="tag tag-211">211</span></td><td>理工</td><td>607</td><td>13,036</td><td>化工强校</td></tr>
+          <tr><td class="uni-name">兰州大学<span class="tag tag-985">985</span></td><td>综合</td><td>607</td><td>13,036</td><td>985性价比高</td></tr>
+          <tr><td class="uni-name">中国药科大学<span class="tag tag-211">211</span></td><td>医药</td><td>607</td><td>13,036</td><td>药学顶尖</td></tr>
+          <tr><td class="uni-name">杭州电子科技大学</td><td>理工</td><td>607</td><td>13,036</td><td>IT就业强校</td></tr>
+          <tr><td class="uni-name">中国传媒大学<span class="tag tag-211">211</span></td><td>语言</td><td>605</td><td>13,804</td><td>传媒类顶尖</td></tr>
+          <tr><td class="uni-name">华北电力大学(保定)<span class="tag tag-211">211</span></td><td>理工</td><td>605</td><td>13,804</td><td>电力特色</td></tr>
+          <tr><td class="uni-name">西南财经大学<span class="tag tag-211">211</span></td><td>财经</td><td>605</td><td>13,804</td><td>金融强校</td></tr>
+          <tr><td class="uni-name">华中师范大学<span class="tag tag-211">211</span></td><td>师范</td><td>605</td><td>13,804</td><td>部属师范</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header tier-stable">
+        <span class="tier-name">稳一稳</span>
+        <span class="tier-desc">等效位次 14,000-16,000 | 录取概率约50-70%</span>
+      </div>
+      <table class="uni-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">院校名称</th>
+            <th>类型</th>
+            <th>近年录取分</th>
+            <th>近年位次</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="uni-name">中南大学<span class="tag tag-985">985</span></td><td>综合</td><td>600(24年)</td><td>14,196</td><td>本省985，部分专业组</td></tr>
+          <tr><td class="uni-name">重庆大学<span class="tag tag-985">985</span></td><td>综合</td><td>599(24年)</td><td>14,586</td><td>985可冲部分专业</td></tr>
+          <tr><td class="uni-name">暨南大学<span class="tag tag-211">211</span></td><td>综合</td><td>605(25年)</td><td>13,804</td><td>广州名校</td></tr>
+          <tr><td class="uni-name">福州大学<span class="tag tag-211">211</span></td><td>理工</td><td>605(25年)</td><td>13,804</td><td>理工较强</td></tr>
+          <tr><td class="uni-name">西南大学<span class="tag tag-211">211</span><span class="tag tag-double">双一流</span></td><td>综合</td><td>605(25年)</td><td>13,804</td><td>西南地区名校</td></tr>
+          <tr><td class="uni-name">江南大学<span class="tag tag-211">211</span></td><td>综合</td><td>604(25年)</td><td>14,233</td><td>食品/设计强校</td></tr>
+          <tr><td class="uni-name">河海大学<span class="tag tag-211">211</span></td><td>理工</td><td>604(25年)</td><td>14,233</td><td>水利特色顶尖</td></tr>
+          <tr><td class="uni-name">中国地质大学(武汉)<span class="tag tag-211">211</span></td><td>理工</td><td>604(25年)</td><td>14,233</td><td>地质特色</td></tr>
+          <tr><td class="uni-name">西北农林科技大学<span class="tag tag-985">985</span></td><td>农林</td><td>604(25年)</td><td>14,233</td><td>985性价比极高</td></tr>
+          <tr><td class="uni-name">云南大学<span class="tag tag-211">211</span><span class="tag tag-double">双一流</span></td><td>综合</td><td>604(25年)</td><td>14,233</td><td>西南名校</td></tr>
+          <tr><td class="uni-name">中国政法大学<span class="tag tag-211">211</span></td><td>政法</td><td>598(24年)</td><td>14,992</td><td>法学顶尖</td></tr>
+          <tr><td class="uni-name">南京理工大学<span class="tag tag-211">211</span></td><td>理工</td><td>598(24年)</td><td>14,992</td><td>兵器特色强校</td></tr>
+          <tr><td class="uni-name">首都医科大学</td><td>医药</td><td>600(24年)</td><td>14,196</td><td>医学实力强</td></tr>
+          <tr><td class="uni-name">四川大学<span class="tag tag-985">985</span></td><td>综合</td><td>604(25年国家专项)</td><td>14,233</td><td>国家专项计划</td></tr>
+          <tr><td class="uni-name">对外经济贸易大学<span class="tag tag-211">211</span></td><td>财经</td><td>604(25年国家专项)</td><td>14,233</td><td>国家专项计划</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header tier-safe">
+        <span class="tier-name">保一保</span>
+        <span class="tier-desc">等效位次 16,000-20,000 | 录取概率约80-95%</span>
+      </div>
+      <table class="uni-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">院校名称</th>
+            <th>类型</th>
+            <th>近年录取分</th>
+            <th>近年位次</th>
+            <th>备注</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="uni-name">北京交通大学<span class="tag tag-211">211</span></td><td>理工</td><td>598(24年)</td><td>14,992</td><td>交通/通信强校</td></tr>
+          <tr><td class="uni-name">河北工业大学<span class="tag tag-211">211</span></td><td>理工</td><td>598(24年)</td><td>14,992</td><td>天津211</td></tr>
+          <tr><td class="uni-name">安徽大学<span class="tag tag-211">211</span></td><td>综合</td><td>599(24年)</td><td>14,586</td><td>合肥211</td></tr>
+          <tr><td class="uni-name">贵州大学<span class="tag tag-211">211</span><span class="tag tag-double">双一流</span></td><td>综合</td><td>599(24年)</td><td>14,586</td><td>211性价比高</td></tr>
+          <tr><td class="uni-name">合肥工业大学<span class="tag tag-211">211</span></td><td>理工</td><td>~596(25年)</td><td>~17,600</td><td>工科实力强</td></tr>
+          <tr><td class="uni-name">华中农业大学<span class="tag tag-211">211</span></td><td>农林</td><td>~595(25年)</td><td>~18,050</td><td>农业/生命科学强</td></tr>
+          <tr><td class="uni-name">太原理工大学<span class="tag tag-211">211</span></td><td>理工</td><td>~593(25年)</td><td>~19,000</td><td>煤炭/材料特色</td></tr>
+          <tr><td class="uni-name">南昌大学<span class="tag tag-211">211</span><span class="tag tag-double">双一流</span></td><td>综合</td><td>~594(25年)</td><td>~18,500</td><td>江西第一</td></tr>
+          <tr><td class="uni-name">长安大学<span class="tag tag-211">211</span></td><td>理工</td><td>~593(25年)</td><td>~19,000</td><td>交通/地学特色</td></tr>
+          <tr><td class="uni-name">大连海事大学<span class="tag tag-211">211</span></td><td>理工</td><td>~594(25年)</td><td>~18,500</td><td>海事特色</td></tr>
+          <tr><td class="uni-name">湖南师范大学<span class="tag tag-211">211</span></td><td>师范</td><td>~595(25年)</td><td>~18,050</td><td>本省211师范</td></tr>
+          <tr><td class="uni-name">陕西师范大学<span class="tag tag-211">211</span></td><td>师范</td><td>~594(25年)</td><td>~18,500</td><td>部属师范</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>四、志愿填报策略建议</h2>
+    <div class="tips">
+      <ul>
+        <li><strong>以位次为核心：</strong>你的排名14,759是选校的黄金基准。每年分数线会波动，但大学录取位次相对稳定，波动通常在±2000名以内。</li>
+        <li><strong>冲稳保比例建议 3:5:2：</strong>湖南新高考可填45个院校专业组志愿。建议冲3-5个，稳15-20个，保10-15个，形成梯度。</li>
+        <li><strong>关注专业组而非仅看校名：</strong>同一大学不同专业组录取分差距可能很大。例如中南大学部分专业组600分可录，但热门专业组可能需要620+。</li>
+        <li><strong>省内院校有天然优势：</strong>中南大学、湖南大学、湖南师大在湖南招生计划多，录取位次相对友好，建议作为稳/保的重要选项。</li>
+        <li><strong>关注国家专项/地方专项：</strong>如果符合专项计划资格，可以以更低分数进入更好的学校。如四川大学、对外经济贸易大学都有国家专项名额。</li>
+        <li><strong>专业优先 vs 学校优先：</strong>这个分数段，如果追求就业，建议优先选城市（北京/上海/广州/深圳）和专业（计算机/电子信息/金融等），其次再看学校层次。</li>
+        <li><strong>中外合作办学值得考虑：</strong>如大连理工大学中外合作组在2025年604分即可录取，比普通组低不少，家庭经济条件允许的话是进入985的捷径。</li>
+        <li><strong>务必勾选"服从调剂"：</strong>湖南新高考实行平行志愿，勾选服从调剂可大幅降低退档风险。每个院校专业组内部建议都勾选。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>五、你的位次在全省的位置</h2>
+    <div class="info-box">
+      <p>2026年湖南物理类考生约<span class="highlight">30万人</span>，你的14,759名意味着：</p>
+      <p>排在全省物理类前 <span class="highlight">4.92%</span> 的位置</p>
+      <p>高于600分线以上考生中的 <span class="highlight">21.8%</span>（600分以上共18,876人，你排在其中第4,117位左右）</p>
+      <p>整体属于<span class="highlight">中上水平</span>，可冲刺部分985院校的中下游专业组，211院校选择面较广。</p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    <p>本报告数据来源于湖南省教育考试院公开发布的分数线及一分一段表，院校录取数据参考2024-2025年实际录取情况。</p>
+    <p>2026年实际录取情况可能因招生计划调整、试题难度变化等因素有所不同，请以官方发布的2026年招生计划为准。</p>
+    <p>报告仅供参考，不构成志愿填报的最终依据。建议结合"潇湘高考"APP和各校招生章程综合决策。</p>
+  </div>
+
+</div>
+</body>
+</html>
